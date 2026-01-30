@@ -11,6 +11,8 @@ this repository (the directory containing `Dockerfile`), run
 ```
 sudo docker build --tag 'fscwebsite' .
 ```
+Note that you'll need to rebuild every time the source code of the app
+changes.
 
 Finally, run the built container. Forward the appropriate ports
 ```
