@@ -18,6 +18,11 @@ Finally, run the built container. Forward the appropriate ports
 ```
 sudo docker run -d --name 'myfscwebsite' -p 80:80 -p 443:443 fscwebsite
 ```
+If port 443 is taken up on your server, try (replacing `8443` with whatever
+port is available on your system)
+```
+sudo docker run -d --name 'myfscwebsite' -p 8443:443 fscwebsite
+```
 
 If you need a shell in the app, run
 ```

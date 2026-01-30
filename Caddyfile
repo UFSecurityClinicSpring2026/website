@@ -1,5 +1,5 @@
 https://:443 {
-	reverse_proxy localhost:8000
+	reverse_proxy localhost:8080
 	tls internal {
 		on_demand
 	}
