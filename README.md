@@ -40,3 +40,5 @@ sudo docker stop myfscwebsite && sudo docker rm myfscwebsite
  * Flask
  * Python
  * SQLite
+ * Linux
+ * Docker
