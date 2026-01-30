@@ -13,13 +13,18 @@ sudo docker build --tag 'fscwebsite' .
 
 Finally, run the built container.
 ```
-sudo 
+sudo docker run -d --name 'myfscwebsite' -p 80:80 -p 443:443 fscwebsite
+```
+
+If you need a shell in the app, run
+```
+sudo docker exec -it myfscwebsite /bin/bash
 ```
 
 Sometimes, you might want to rebuild the app. You'll need to remove the old
 version first using the following command:
 ```
-sudo docker stop fscwebsite && sudo docker remove fscwebsite
+sudo docker stop myfscwebsite && sudo docker rm myfscwebsite
 ```
 
 build the dockerfile and start the Docker. Don't forget
