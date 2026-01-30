@@ -2,9 +2,9 @@
 Website for UF Security Clinic
 
 ## Deploying
-To deploy this app, first install Docker for your system. If you're on Windows
-or you have privileges to run Docker as the current user, you can omit `sudo`
-from the following commands.
+To deploy this app, first [install Docker](docs/Docker.md) for your system. 
+If you're on Windows or you have privileges to run Docker as the current user, 
+you can omit `sudo` from the following commands.
 
 Once you have Docker installed, build the app. From the root directory of
 this repository (the directory containing `Dockerfile`), run
