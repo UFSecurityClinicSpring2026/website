@@ -6,12 +6,13 @@ To deploy this app, first install Docker for your system. If you're on Windows
 or you have privileges to run Docker as the current user, you can omit `sudo`
 from the following commands.
 
-Once you have Docker installed, build the app.
+Once you have Docker installed, build the app. From the root directory of
+this repository (the directory containing `Dockerfile`), run
 ```
 sudo docker build --tag 'fscwebsite' .
 ```
 
-Finally, run the built container.
+Finally, run the built container. Forward the appropriate ports
 ```
 sudo docker run -d --name 'myfscwebsite' -p 80:80 -p 443:443 fscwebsite
 ```
