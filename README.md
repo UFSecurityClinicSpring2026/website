@@ -35,9 +35,6 @@ version first using the following command:
 sudo docker stop myfscwebsite && sudo docker rm myfscwebsite
 ```
 
-build the dockerfile and start the Docker. Don't forget
-to forward the appropriate ports. The app listens on port 80 and 443 by default.
-
 ## Tech Stack
  * Caddy
  * Flask
