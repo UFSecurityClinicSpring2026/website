@@ -4,11 +4,12 @@
 	<link rel="stylesheet" href="/static/styles.css">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<title>Home Page - Florida Security Clinic</title>
+	<title>{{ title }} - Florida Security Clinic</title>
 </head>
 <body>
-	<h1>Home Page</h1>
-	<p>Welcome to our home page! It is currently a work in progress.</p>
-	<p><a href="/tickets/new">Create a new ticket</a></p>
+	<h1>{{ title }}</h1>
+	{% for paragraph in paragraphs %}
+	<p>{{ paragraph }}</p>
+	{% endfor %}
 </body>
 </html>
