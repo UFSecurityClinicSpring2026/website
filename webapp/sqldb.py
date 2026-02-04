@@ -12,7 +12,7 @@ def get_db() -> sqlite3.Connection:
     """
     if "db" not in flask.g:
         flask.g.db = sqlite3.connect("fsc.db")
-        flask.g.db.execute("CREATE TABLE IF NOT EXISTS tickets (fid INTEGER NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, PRIMARY KEY (fid AUTOINCREMENT));")
+        flask.g.db.execute("CREATE TABLE IF NOT EXISTS tickets (fid INTEGER NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, message TEXT, PRIMARY KEY (fid AUTOINCREMENT));")
         flask.g.db.commit()
     
     return flask.g.db

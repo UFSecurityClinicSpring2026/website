@@ -8,10 +8,16 @@
 </head>
 <body>
 	<h1>New Ticket</h1>
-	<p>Welcome to our home page! It is currently a work in progress.</p>
+	<p>We're happy to have you here and are glad you're willing to take the 
+	next step of your cybersecurity journey with us. Simply fill out some
+	basic information about yourself and we'll get back to you.</p>
 	<form action="/tickets/new" method="post">
 		<p><label for="name">Name: </label><input type="text" id="name" name="name"></p>
 		<p><label for="name">Email: </label><input type="text" id="email" name="email"></p>
+		<p>
+			<label for="message">Message: </label><br />
+			<textarea id="message" name="message"></textarea>
+		</p>
 		<p><input type="submit" value="Submit"></p>
 	</form>
 </body>
