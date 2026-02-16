@@ -9,7 +9,7 @@ services:
     networks:
       internal:
         ipv4_address: 10.245.233.34
-        ipv6_address: fd86:e070:5705:620a::34
+        ipv6_address: "fd86:e070:5705:620a::34"
     volumes:
       - ./caddy:/opt/caddy/
   website:
@@ -17,7 +17,7 @@ services:
     networks:
       internal:
         ipv4_address: 10.245.233.35
-        ipv6_address: fd86:e070:5705:620a::35
+        ipv6_address: "fd86:e070:5705:620a::35"
 
 networks:
   internal:
