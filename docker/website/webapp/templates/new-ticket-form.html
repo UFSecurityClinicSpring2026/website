@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/static/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>New Ticket - Florida Security Clinic</title>
+</head>
+<body>
+	<h1>New Ticket</h1>
+	<p>We're happy to have you here and are glad you're willing to take the 
+	next step of your cybersecurity journey with us. Simply fill out some
+	basic information about yourself and we'll get back to you.</p>
+	<form action="/tickets/new" method="post">
+		<p><label for="name">Name: </label><input type="text" id="name" name="name"></p>
+		<p><label for="name">Email: </label><input type="text" id="email" name="email"></p>
+		<p>
+			<label for="message">Message: </label><br />
+			<textarea id="message" name="message"></textarea>
+		</p>
+		<p><input type="submit" value="Submit"></p>
+	</form>
+</body>
+</html>

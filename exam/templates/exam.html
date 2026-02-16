@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/static/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Exam - Florida Security Clinic</title>
+</head>
+<body>
+	<h1>Exam</h1>
+	<p>For each question, choose the correct answer. Press submit when complete.</p>
+	<form action="/exam/submit" method="post">
+	{% for questionno, question, answers in questions %}
+		<p>{{ question }}</p>
+		{% for answerno, answer, iscorrect in answers %}
+			{% if iscorrect %}
+				<p><input type="radio" id="q{{ questionno }}a{{ answerno }}" name="q{{ questionno }}" value="correct"><label for="q{{ questionno }}a{{ answerno }}">{{ answer }}</label></p>
+			{% else %}
+				<p><input type="radio" id="q{{ questionno }}a{{ answerno }}" name="q{{ questionno }}" value="incorrect"><label for="q{{ questionno }}a{{ answerno }}">{{ answer }}</label></p>
+			{% endif %}
+		{% endfor %}
+	{% endfor %}
+	</form>
+</body>
+</html>
