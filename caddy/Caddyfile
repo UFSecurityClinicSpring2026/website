@@ -1,6 +1,14 @@
 https://:443 {
-	reverse_proxy localhost:8080
+	reverse_proxy / http://[fd86:e070:5705:620a::35]:8080/
 	tls internal {
 		on_demand
+	}
+	log {
+		output file website.log {
+			mode 644
+			roll_size 2MiB
+			roll_keep_for 7d
+		}
+		format json
 	}
 }
