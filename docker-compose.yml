@@ -22,7 +22,7 @@ services:
 networks:
   internal:
     ipam:
-      driver: ipvlan
+      driver: bridge
       config:
         - subnet: "10.245.233.32/27"
         - subnet: "fd86:e070:5705:620a::/64"
