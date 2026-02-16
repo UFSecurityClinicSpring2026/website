@@ -8,21 +8,21 @@ services:
       - "443:443"
     networks:
       internal:
-        ipv4_address: 172.17.250.2
-        ipv6_address: fd07:d1d9:0cae:62b2::2
+        ipv4_address: 10.245.233.34
+        ipv6_address: fd86:e070:5705:620a::34
     volumes:
       - ./caddy:/opt/caddy/
   website:
     build: ./docker/website
     networks:
       internal:
-        ipv4_address: 172.17.250.3
-        ipv6_address: fd07:d1d9:0cae:62b2::3
+        ipv4_address: 10.245.233.35
+        ipv6_address: fd86:e070:5705:620a::35
 
 networks:
   internal:
     ipam:
       driver: default
       config:
-        - subnet: "172.17.250.0/24"
-        - subnet: "fd07:d1d9:0cae:62b2::/64"
+        - subnet: "10.245.233.32/27"
+        - subnet: "fd86:e070:5705:620a::/64"
