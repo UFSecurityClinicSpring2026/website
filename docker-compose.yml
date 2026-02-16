@@ -22,7 +22,8 @@ services:
 networks:
   internal:
     ipam:
-      driver: default
+      driver: ipvlan
       config:
+        - ipv6
         - subnet: "10.245.233.32/27"
         - subnet: "fd86:e070:5705:620a::/64"
