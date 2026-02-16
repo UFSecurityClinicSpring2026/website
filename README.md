@@ -6,35 +6,24 @@ To deploy this app, first [install Docker](docs/Docker.md) for your system.
 If you're on Windows or you have privileges to run Docker as the current user, 
 you can omit `sudo` from the following commands.
 
-Once you have Docker installed, build the app. From the root directory of
-this repository (the directory containing `Dockerfile`), run
+Once you have Docker installed, simply run the following command to get it up
+and running:
 ```
-sudo docker build --tag 'fscwebsite' .
-```
-Note that you'll need to rebuild every time the source code of the app
-changes.
-
-Finally, run the built container. Forward the appropriate ports
-```
-sudo docker run -d --name 'myfscwebsite' -p 80:80 -p 443:443 fscwebsite
-```
-If port 443 is taken up on your server, try (replacing `8443` with whatever
-port is available on your system)
-```
-sudo docker run -d --name 'myfscwebsite' -p 8443:443 fscwebsite
+sudo docker compose up
 ```
 
-If you need a shell in the app, run
+If you need to stop the Docker containers, run
 ```
-sudo docker exec -it myfscwebsite /bin/bash
+sudo docker compose down
 ```
 
-Sometimes, you might want to rebuild the app. You'll need to remove the old
-version first using the following command:
+If changes are made to the app, you'll need to rebuild it. Run the following 
+command before bringing the app up in order to rebuild it:
 ```
-sudo docker stop myfscwebsite && sudo docker rm myfscwebsite
+sudo docker compose build
 ```
-Note that rebuilding the app will clear all data previously associated with
+
+Note that rebuilding the app may clear all data previously associated with
 the app.
 
 ## Tech Stack
