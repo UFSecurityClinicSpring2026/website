@@ -1,5 +1,5 @@
 https://:443 {
-	reverse_proxy / http://10.245.233.35:8080/
+	reverse_proxy * [fd86:e070:5705:620a::35]:8080
 	tls internal {
 		on_demand
 	}
