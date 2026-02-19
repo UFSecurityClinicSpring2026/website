@@ -1,5 +1,13 @@
+.page_title {
+  text-align: center;
+}
+
 .bordered {
   border: solid;
+}
+
+.logo {
+  width: 33%;
 }
 
 .bordered_right {
@@ -13,8 +21,8 @@
   align-items: center;
 }
 
-.above img {
-  width: 33%;
+.above .logo img {
+  width: 100%;
 }
 
 .above .nav_bar {
