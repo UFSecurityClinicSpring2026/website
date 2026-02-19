@@ -10,6 +10,14 @@ app: flask.Flask = flask.Flask(__name__)
 def index():
     return flask.render_template("index.html")
 
+@app.route("/contact")
+def contact_us():
+    return flask.render_template("contact.html")
+
+@app.route("/about")
+def about_us():
+    return flask.render_template("about.html")
+
 @app.route("/tickets/new", methods=["GET", "POST"])
 def new_ticket():
     if flask.request.method == "GET":
