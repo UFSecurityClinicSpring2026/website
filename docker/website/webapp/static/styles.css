@@ -1,0 +1,53 @@
+.bordered {
+  border: solid;
+}
+
+.bordered_right {
+  border: solid;
+  border-left: none;
+}
+
+.above {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.above img {
+  width: 33%;
+}
+
+.above .nav_bar {
+  padding: 0;
+  width: 25%;
+  height: 75%;
+}
+
+.above .nav_bar li {
+  flex: 5;
+}
+
+.nav_bar {
+  padding-top: 10px;
+  list-style-type: none;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+}
+
+.nav_bar li {
+  flex: 1;
+}
+
+.nav_bar li a {
+  display: block;
+  color: #000000;
+  padding: 8px;
+  font-size: 20px;
+  text-align: center;
+  text-decoration: none;
+}
+
+.nav_bar li a:hover {
+  background-color: #aaaaaa;
+}
