@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/static/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Exam - Florida Security Clinic</title>
+</head>
+<body>
+	<h1>Please login</h1>
+	<p>Please enter your first name, last name, and exam password to log in to your exam session.</p>
+	<form action="/exam/login" method="post">
+		<p><label for="firstname">First name: </label><input type="text" id="firstname" name="firstname" /></p>
+		<p><label for="firstname">Last name: </label><input type="text" id="lastname" name="lastname" /></p>
+		<p><label for="firstname">Password: </label><input type="password" id="password" name="password" /></p>
+		<p><input type="submit" value="Login" /></p>
+	</form>
+	{% if error_msg %}
+	<p style="color:red">{{ error_msg }}</p>
+	{% endif %}
+</body>
+</html>

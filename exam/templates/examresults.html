@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/static/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Exam - Florida Security Clinic</title>
+</head>
+<body>
+	<h1>Exam Results</h1>
+	<p>Name: {{ name }}</p>
+	<p>Time: {{ exam_datetime_fallback_str }}</p>
+	<p>Score: {{ score }}</p>
+	{% if passed %}
+	<p>Congratulations, you passed!</p>
+	{% else %}
+	<p>Unfortunately, you did not pass.</p>
+	{% endif %}
+</body>
+</html>

@@ -9,17 +9,15 @@
 <body>
 	<h1>Exam</h1>
 	<p>For each question, choose the correct answer. Press submit when complete.</p>
+	<p>Do not navigate away from this page. If you do, your answers will not be saved.</p>
 	<form action="/exam/submit" method="post">
 	{% for questionno, question, answers in questions %}
-		<p>{{ question }}</p>
-		{% for answerno, answer, iscorrect in answers %}
-			{% if iscorrect %}
-				<p><input type="radio" id="q{{ questionno }}a{{ answerno }}" name="q{{ questionno }}" value="correct"><label for="q{{ questionno }}a{{ answerno }}">{{ answer }}</label></p>
-			{% else %}
-				<p><input type="radio" id="q{{ questionno }}a{{ answerno }}" name="q{{ questionno }}" value="incorrect"><label for="q{{ questionno }}a{{ answerno }}">{{ answer }}</label></p>
-			{% endif %}
+		<p>Q: {{ question }}</p>
+		{% for answerno, answer in answers %}
+			<p><input type="radio" id="q{{ questionno }}a{{ answerno }}" name="q{{ questionno }}" value="a{{ answerno }}"><label for="q{{ questionno }}a{{ answerno }}">{{ answer }}</label></p>
 		{% endfor %}
 	{% endfor %}
+	<p><input type="submit" value="Submit" />
 	</form>
 </body>
 </html>
