@@ -178,9 +178,9 @@ def exam_submit():
                     continue
                 question_permutation: lehmer.Permutation = lehmer.Permutation.from_lehmer(question_lehmer, answer_choice_count)
                 
-                print("\n --- QUESTION ---")
-                print(question_permutation)
-                print(repr(request_form_value))
+                #print("\n --- QUESTION ---")
+                #print(question_permutation)
+                #print(repr(request_form_value))
                 
                 # Mark question as correct if it equals where the correct answer would have been sorted, otherwise mark it incorrect.
                 question_score: int = int(request_form_value == "a" + str(question_permutation.permutation[0]))

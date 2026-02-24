@@ -1,0 +1,50 @@
+.certborder {
+	margin: 1em 25%;
+	padding: 1em;
+	border-style: solid;
+	border-width: 1px;
+	
+	text-align: center;
+}
+
+/* Narrow screens */
+@media screen and (max-width: 600px) {
+	.certborder {
+		margin: 5px;
+		padding: 0;
+		border-style: none;
+
+		text-align: center;
+	}
+}
+
+.certheader {
+	
+}
+
+.certtext {
+	
+}
+
+.certname {
+	font-size: 2em;
+}
+
+.certtime {
+	font-size: 1.5em;
+}
+
+
+.certscore {
+	font-size: 2em;
+}
+
+@media print{
+	.noprint {
+		display: none;
+	}
+}
+
+.controls {
+	text-align: center;
+}

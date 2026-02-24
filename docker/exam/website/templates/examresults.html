@@ -2,19 +2,52 @@
 <html>
 <head>
 	<link rel="stylesheet" href="static/styles.css">
+	<link rel="stylesheet" href="static/certificate.css" />
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Exam - Florida Security Clinic</title>
+	<script>
+	"use strict";
+	function calculateTime() {
+		let examTimeUnix = parseInt("{{ exam_timestamp }}", 10);
+		let examTimeDate = new Date(examTimeUnix * 1000);
+		if (examTimeDate === examTimeDate) {
+			// examTimeDate is not NaN
+			document.getElementById("examdatetimestr").innerHTML = 
+					examTimeDate.toLocaleString("en-US");
+		}
+	}
+	</script>
 </head>
-<body>
-	<h1>Exam Results</h1>
-	<p>Name: {{ name }}</p>
-	<p>Time: {{ exam_datetime_fallback_str }}</p>
-	<p>Score: {{ score }}</p>
-	{% if passed %}
-	<p>Congratulations, you passed!</p>
-	{% else %}
-	<p>Unfortunately, you did not pass.</p>
-	{% endif %}
+<body onload="calculateTime()">
+	<div class="certborder">
+		<h2 class="certheader">Florida Security Clinic</h2>
+		{% if passed %}
+			<p class="certtext">This certificate is proudly presented to</p>
+			<p class="certname">{{ name }}</p>
+		{% else %}
+			<p class="certtext">Thank you for taking the exam.</p>
+		{% endif %}
+		{% if passed %}
+			<p class="certtext">at</p>
+		{% else %}
+			<p class="certtext">Examination time:</p>
+		{% endif %}
+		<p class="certtime"><span id="examdatetimestr">{{ exam_datetime_fallback_str }}</span></p>
+		{% if passed %}
+			<p class="certtext">for achieving a score of</p>
+		{% else %}
+			<p class="certtext">You scored</p>
+		{% endif %}
+		<p class="certscore">{{ score }}</p>
+		{% if passed %}
+		<p class="certtext">on the clinic staff training exam</p>
+		{% else %}
+			<p class="certtext">Unfortuantely, you did not pass.</p>
+		{% endif %}
+	</div>
+	<div class="noprint controls">
+		<p><a href="exam-logout">Log out</a></p>
+	</div>
 </body>
 </html>
