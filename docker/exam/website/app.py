@@ -13,8 +13,12 @@ app: flask.Flask = flask.Flask(__name__)
 @app.route("/")
 def index():
     return flask.render_template("index.html")
+    
+@app.route("/index.html")
+def index_html():
+    return flask.render_template("index.html")
 
-@app.route("/exam/login", methods=["GET", "POST"])
+@app.route("/exam-login", methods=["GET", "POST"])
 def exam_login():
     if flask.request.method == "GET":
         return flask.render_template("examlogin.html", 
@@ -34,7 +38,7 @@ def exam_login():
     else:
         flask.abort(405)
 
-@app.route("/exam/secure")
+@app.route("/exam-secure")
 def exam_main():
     exam_token: typing.Optional[str] = flask.request.cookies.get("token", "")
     if exam_token.strip == "":
@@ -125,7 +129,7 @@ def exam_main():
     else:
         flask.abort(401)
 
-@app.route("/exam/submit", methods=["GET", "POST"])
+@app.route("/exam-submit", methods=["GET", "POST"])
 def exam_submit():
     if flask.request.method == "POST":
         exam_token: typing.Optional[str] = flask.request.cookies.get("token", "")
@@ -186,7 +190,7 @@ def exam_submit():
     else:
         flask.abort(405)
 
-@app.route("/exam/logout")
+@app.route("/exam-logout")
 def exam_logout():
     flask_response = flask.make_response(flask.redirect(flask.url_for("index")))
     flask_response.set_cookie("token", "", expires=0)
@@ -196,7 +200,7 @@ def exam_logout():
 def proctor_portal():
     return flask.render_template("proctor.html")
 
-@app.route("/proctor/exam/create", methods=["POST"])
+@app.route("/proctor-exam-create", methods=["POST"])
 def proctor_create_exam():
     fname: str
     lname: str

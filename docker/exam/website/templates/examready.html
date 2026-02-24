@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" href="/static/styles.css">
+	<link rel="stylesheet" href="static/styles.css">
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title>Exam - Florida Security Clinic</title>
@@ -11,18 +11,18 @@
 	<p>Welcome!</p>
 	<p>
 		Please verify that the following name is correct. If it isn't, please 
-		<a href="/exam/logout">log out by clicking here</a> or the button at the bottom of the page.
+		<a href="exam-logout">log out by clicking here</a> or the button at the bottom of the page.
 	</p>
 	<p>Name: {{ name }}</p>
 	<p>To start the exam, click "Take the exam" below. Time will start as soon as you click the button.</p>
 	<p>You will have <strong>1 hour</strong> from the the exam starts to complete the exam.</p>
 	<p>You will earn 1 point for every correct answer. There is no penalty for incorrect answers, so make your best guess if unsure.</p>
 	<p>If you're not ready to start this exam yet, simply close this tab.</p>
-	<form action="/exam/secure" method="get">
+	<form action="exam-secure" method="get">
 		<input type="text" name="start" id="start" style="display:none" value="yes" />
 		<input type="submit" value="Take the exam" />
 	</form>
-	<form action="/exam/logout" method="get">
+	<form action="exam-logout" method="get">
 		<input type="submit" value="Log out" />
 	</form>
 </body>
