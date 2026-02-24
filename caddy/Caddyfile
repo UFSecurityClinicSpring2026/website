@@ -1,8 +1,11 @@
 https://:443 {
 	reverse_proxy * [fd86:e070:5705:620a::35]:8080
-	handle_path /exam* {
+	
+	redir /exam /exam/
+	handle_path /exam/* {
 		reverse_proxy [fd86:e070:5705:620a::36]:8080
 	}
+	
 	tls internal {
 		on_demand
 	}
