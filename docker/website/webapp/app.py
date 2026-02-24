@@ -18,6 +18,10 @@ def contact_us():
 def about_us():
     return flask.render_template("about.html")
 
+@app.route("/privacy")
+def privacy_policy():
+    return flask.render_template("privacy-policy.html")
+
 @app.route("/tickets/new", methods=["GET", "POST"])
 def new_ticket():
     if flask.request.method == "GET":
