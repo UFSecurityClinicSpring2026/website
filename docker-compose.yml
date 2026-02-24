@@ -20,6 +20,8 @@ services:
         ipv6_address: "fd86:e070:5705:620a::35"
   exam:
     build: ./docker/exam
+    environment:
+      DEFAULT_PROCTOR_PASSWORD: "ChangeMe123!"
     networks:
       internal:
         ipv4_address: 10.245.233.36

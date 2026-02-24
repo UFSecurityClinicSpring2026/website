@@ -5,6 +5,7 @@ import uuid
 
 import flask
 
+import basicauth
 import lehmer
 import sqldb
 
@@ -197,10 +198,12 @@ def exam_logout():
     return flask_response
 
 @app.route("/proctor", methods=["GET", "POST"])
+@basicauth.auth_required
 def proctor_portal():
     return flask.render_template("proctor.html")
 
 @app.route("/proctor-exam-create", methods=["POST"])
+@basicauth.auth_required
 def proctor_create_exam():
     fname: str
     lname: str

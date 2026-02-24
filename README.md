@@ -26,6 +26,9 @@ sudo docker compose build
 Note that rebuilding the app may clear all data previously associated with
 the app.
 
+If deploying for production, please change all the secrets in 
+`docker-compose.yml` away from the defaults **before** deploying the app.
+
 ## Tech Stack
  * Caddy
  * Flask
