@@ -38,7 +38,6 @@
 .nav_bar {
   padding-top: 10px;
   list-style-type: none;
-  background-color: #ffffff;
   display: flex;
   align-items: center;
 }
@@ -49,13 +48,23 @@
 
 .nav_bar li a {
   display: block;
+  background-color: #ffffff;
   color: #000000;
   padding: 8px;
   font-size: 20px;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
   text-align: center;
   text-decoration: none;
 }
 
 .nav_bar li a:hover {
-  background-color: #aaaaaa;
+  background-color: #F3F3F3;
+}
+
+body {
+  background-color: #F3F3F3;
+  color: #133b84;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  padding-left: 7%;
+  padding-right: 7%;
 }
