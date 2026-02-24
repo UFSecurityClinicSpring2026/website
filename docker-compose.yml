@@ -18,6 +18,8 @@ services:
       internal:
         ipv4_address: 10.245.233.35
         ipv6_address: "fd86:e070:5705:620a::35"
+  exam:
+    build: ./docker/exam
 
 networks:
   internal:
