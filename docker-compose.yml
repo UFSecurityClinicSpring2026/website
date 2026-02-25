@@ -22,6 +22,7 @@ services:
     build: ./docker/exam
     environment:
       DEFAULT_PROCTOR_PASSWORD: "ChangeMe123!"
+      SCRIPT_NAME: "/exam"
     networks:
       internal:
         ipv4_address: 10.245.233.36
