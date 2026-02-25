@@ -13,7 +13,7 @@ import sqldb
 base_url: str = os.environ.get("BASE_URL", "")
 """The base URL at the root of the app. Include a leading slash"""
 
-app: flask.Flask = flask.Flask(__name__)
+app: flask.Flask = flask.Flask(__name__, static_url_path=f"{base_url}/static")
 
 @app.route(f"{base_url}/")
 def index():
