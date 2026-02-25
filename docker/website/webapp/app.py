@@ -5,9 +5,24 @@ import flask
 import sqldb
 
 import werkzeug.security as wk
+
 import re
 
+from user import User
+
+import flask_login
+
 app: flask.Flask = flask.Flask(__name__)
+app.secret_key = "super secret string" # CHANGE THIS FOR PRODUCTION
+login_manager = flask_login.LoginManager()
+login_manager.init_app(app)
+
+"""
+Overloading function for LoginManager
+"""
+@login_manager.user_loader
+def user_loader(username):
+  return User.check(username)
 
 def check_requirements(username: str, password: str):
   return re.match(".{15,64}", password) is not None and re.match("\\w+", username) is not None
@@ -92,4 +107,42 @@ def register():
             destination="/"
         )
     else:
-      flask.abort(405)
+        flask.abort(405)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    if flask.request.method == "GET":
+        return flask.render_template("login.html")
+    elif flask.request.method == "POST":
+        sql_db: sqlite3.Connection = sqldb.get_db()
+        if "username" not in flask.request.form or "password" not in flask.request.form:
+            flask.abort(422)
+        username, password = flask.request.form["username"].strip(), flask.request.form["password"].strip()
+        if re.match("\\w+", username) is None:
+            flask.abort(422)
+        res = sql_db.execute("SELECT username, auth_string, first_name, last_name, is_student, is_client FROM users WHERE username = ?;", (username,)).fetchall()
+        if len(res) == 0:
+            flask.abort(401)
+        pass_hash = res[0][1]
+        first_name = res[0][2]
+        last_name = res[0][3]
+        is_student = res[0][4]
+        is_client = res[0][5]
+        if not wk.check_password_hash(pass_hash, password):
+            flask.abort(401)
+        user = User(username, first_name + " " + last_name, is_client, is_student)
+        flask_login.login_user(user)
+        return flask.redirect('/')
+    else:
+        flask.abort(405)
+
+@app.route("/test-login", methods=["GET"])
+@flask_login.login_required
+def test():
+  return "Logged in as " + flask_login.current_user.get_id()
+
+@app.route("/logout", methods=["GET", "POST"])
+@flask_login.login_required
+def logout():
+  flask_login.logout_user()
+  return flask.redirect('/')
