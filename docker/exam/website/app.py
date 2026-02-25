@@ -1,4 +1,5 @@
 import datetime
+import os
 import random
 import sqlite3
 import uuid
@@ -9,17 +10,20 @@ import basicauth
 import lehmer
 import sqldb
 
+base_url: str = os.environ.get("BASE_URL", "")
+"""The base URL at the root of the app. Include a leading slash"""
+
 app: flask.Flask = flask.Flask(__name__)
 
-@app.route("/")
+@app.route(f"{base_url}/")
 def index():
     return flask.render_template("index.html")
     
-@app.route("/index.html")
+@app.route(f"{base_url}/index.html")
 def index_html():
     return flask.render_template("index.html")
 
-@app.route("/exam-login", methods=["GET", "POST"])
+@app.route(f"{base_url}/exam-login", methods=["GET", "POST"])
 def exam_login():
     if flask.request.method == "GET":
         return flask.render_template("examlogin.html", 
@@ -39,7 +43,7 @@ def exam_login():
     else:
         flask.abort(405)
 
-@app.route("/exam-secure")
+@app.route(f"{base_url}/exam-secure")
 def exam_main():
     exam_token: typing.Optional[str] = flask.request.cookies.get("token", "")
     if exam_token.strip == "":
@@ -130,7 +134,7 @@ def exam_main():
     else:
         flask.abort(401)
 
-@app.route("/exam-submit", methods=["GET", "POST"])
+@app.route(f"{base_url}/exam-submit", methods=["GET", "POST"])
 def exam_submit():
     if flask.request.method == "POST":
         exam_token: typing.Optional[str] = flask.request.cookies.get("token", "")
@@ -191,18 +195,18 @@ def exam_submit():
     else:
         flask.abort(405)
 
-@app.route("/exam-logout")
+@app.route(f"{base_url}/exam-logout")
 def exam_logout():
     flask_response = flask.make_response(flask.redirect(flask.url_for("index")))
     flask_response.set_cookie("token", "", expires=0)
     return flask_response
 
-@app.route("/proctor", methods=["GET", "POST"])
+@app.route(f"{base_url}/proctor", methods=["GET", "POST"])
 @basicauth.auth_required
 def proctor_portal():
     return flask.render_template("proctor.html")
 
-@app.route("/proctor-exam-create", methods=["POST"])
+@app.route(f"{base_url}/proctor-exam-create", methods=["POST"])
 @basicauth.auth_required
 def proctor_create_exam():
     fname: str
