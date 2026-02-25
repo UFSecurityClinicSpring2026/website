@@ -24,7 +24,7 @@ def index_html():
     return flask.render_template("index.html")
 
 @app.route(f"{base_url}/browsercheck")
-def index():
+def browser_check():
     return flask.render_template("browsercheck.html")
 
 @app.route(f"{base_url}/exam-login", methods=["GET", "POST"])
