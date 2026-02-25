@@ -14,7 +14,7 @@ class User:
     self._active = True
     self._anonymous = False
   
-  def check(username):
+  def retrieve(username):
     sql_db: sqlite3.Connection = sqldb.get_db()
     res = sql_db.execute("SELECT username, first_name, last_name, is_client, is_student FROM users WHERE username = ?;", (username,)).fetchall()
     if len(res) == 0:

@@ -22,7 +22,7 @@ Overloading function for LoginManager
 """
 @login_manager.user_loader
 def user_loader(username):
-  return User.check(username)
+  return User.retrieve(username)
 
 def check_requirements(username: str, password: str):
   return re.match(".{15,64}", password) is not None and re.match("\\w+", username) is not None
