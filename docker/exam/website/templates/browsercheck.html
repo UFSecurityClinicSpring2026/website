@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="static/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Browser Check - Florida Security Clinic</title>
+	<style>
+		.troubleshoottable {
+			border: 1px solid black
+		}
+	</style>
+	<script>
+		function onload() {
+			document.getElementById("javascriptcheck").innerHTML = "&#x2714;";
+		}
+	</script>
+</head>
+<body onload="onload()">
+	<h1>Exam</h1>
+	<p>If you see a check mark to the left of every element in the "Required" list below, you are likely good to go! Otherwise, please follow the instructions under the "Troubleshooting" column.</p>
+	<h2>Required Technologies</h2>
+	<p>These technologies are required for this website to function correctly.</p>
+	<table class="troubleshoottable">
+		<tr class="troubleshoottable">
+			<th class="troubleshoottable">Passed?</th>
+			<th class="troubleshoottable">Check</th>
+			<th class="troubleshoottable">Troubleshooting</th>
+		</tr>
+		<tr class="troubleshoottable">
+			<td class="troubleshoottable"><img src="static/images/checkmark-black.png" alt="Image of a black checkmark" /></td>
+			<td class="troubleshoottable">Images</td>
+			<td class="troubleshoottable">Visit your browser settings and enable images for this website. Or upgrade to a supported browser.</td>
+		</tr>
+		<!-- <tr class="troubleshoottable">
+			<td class="troubleshoottable"></td>
+			<td class="troubleshoottable">Cookies</td>
+			<td class="troubleshoottable">Visit your browser settings and enable cookies.</td>
+		</tr> -->
+		<tr>
+			<td class="troubleshoottable">&#x2714;</td>
+			<td class="troubleshoottable">Unicode</td>
+			<td class="troubleshoottable">Upgrade to a supported browser or update the fonts on your system.</td>
+		</tr>
+	</table>
+	<h2>Optional Technologies</h2>
+	<p>These technologies are optional, but might enhance your experience on this site</p>
+	<table class="troubleshoottable">
+		<tr class="troubleshoottable">
+			<th class="troubleshoottable">Passed?</th>
+			<th class="troubleshoottable">Check</th>
+			<th class="troubleshoottable">Troubleshooting</th>
+		</tr>
+		<tr class="troubleshoottable">
+			<td class="troubleshoottable" id="javascriptcheck">&#x274C;</td>
+			<td class="troubleshoottable">JavaScript</td>
+			<td class="troubleshoottable">Visit your browser settings and enable JavaScript. Or upgrade to a supported browser.</td>
+		</tr>
+	</table>
+</body>
+</html>
