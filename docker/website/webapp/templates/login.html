@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/static/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Login - Florida Security Clinic</title>
+</head>
+<body>
+  {% include 'header.html' %}
+  <h1 class="page_title">Login</h1>
+  <p>
+    <form action="/login" method="post">
+      <p><label for="username">Username: </label><input type="text" id="username" name="username"></p>
+		  <p><label for="password">Password: </label><input type="text" id="password" name="password"></p>
+		  <p><input type="submit" value="Submit"></p>
+    </form>
+  </p>
+</body>
