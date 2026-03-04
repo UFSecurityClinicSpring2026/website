@@ -29,6 +29,11 @@ the app.
 If deploying for production, please change all the secrets in 
 `docker-compose.yml` away from the defaults **before** deploying the app.
 
+## More Documentation
+Documentation for each of the individual components of this app can be found
+below:
+ - [docs/Exam.md](docs/Exam.md) - Exam documentation
+
 ## Tech Stack
  * Caddy
  * Flask
