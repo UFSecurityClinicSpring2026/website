@@ -13,7 +13,7 @@ def get_db() -> sqlite3.Connection:
     Gets the SQLite database associated with this app
     """
     if "db" not in flask.g:
-        flask.g.db = sqlite3.connect("securedata/exam.db")
+        flask.g.db = sqlite3.connect("data/exam.db")
         flask.g.db.commit()
     
     return flask.g.db

@@ -10,7 +10,7 @@ def main(argv: list[str]) -> int:
     argparser.add_argument("in_file", type=pathlib.Path,
             help="Input CSV to import questions from.")
     parsedargs: dict[str, typing.Any] = vars(argparser.parse_args(argv[1:]))
-    database: sqlite3.Connection = sqlite3.connect("securedata/exam.db")
+    database: sqlite3.Connection = sqlite3.connect("data/exam.db")
     
     question_insert_query: str = '''INSERT INTO question 
     (fid, question, correct, incorrect1, incorrect2, incorrect3, incorrect4)

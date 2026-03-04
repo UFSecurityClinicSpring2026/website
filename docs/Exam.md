@@ -20,4 +20,4 @@ Exam-related data is stored in the `/examdata` directory:
    this to a long, unique password before first deployment. It is unlikely that 
    this password will need to be manually typed over the lifetime of this app.
    Do not change this value after deploying the app, otherwise data loss may 
-   occur.
+   occur. (Not implemented yet)
