@@ -14,7 +14,7 @@
 	{% for questionno, question, answers in questions %}
 		<p>Q: {{ question }}</p>
 		{% for answerno, answer in answers %}
-			<p><input type="radio" id="q{{ questionno }}a{{ answerno }}" name="q{{ questionno }}" value="a{{ answerno }}"><label for="q{{ questionno }}a{{ answerno }}">{{ answer }}</label></p>
+			<p><input type="radio" id="q{{ questionno }}a{{ answerno }}" name="q{{ questionno }}" value="a{{ answerno }}" required><label for="q{{ questionno }}a{{ answerno }}">{{ answer }}</label></p>
 		{% endfor %}
 	{% endfor %}
 	<p><input type="submit" value="Submit" />
