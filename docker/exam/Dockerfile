@@ -8,6 +8,7 @@ COPY ./website /opt/website/
 COPY ./startwebsite.sh.gz /opt/
 COPY ./setupencryption.sh.gz /opt/
 
+RUN mkdir /opt/website/data
 VOLUME ["/opt/website/data"]
 
 RUN gunzip /opt/startwebsite.sh.gz
