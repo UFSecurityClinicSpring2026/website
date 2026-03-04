@@ -8,6 +8,8 @@ COPY ./website /opt/website/
 COPY ./startwebsite.sh.gz /opt/
 COPY ./setupencryption.sh.gz /opt/
 
+VOLUME ["/opt/website/data"]
+
 RUN gunzip /opt/startwebsite.sh.gz
 RUN gunzip /opt/setupencryption.sh.gz
 RUN bash /opt/setupencryption.sh

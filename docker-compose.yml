@@ -29,7 +29,7 @@ services:
         ipv4_address: 10.245.233.36
         ipv6_address: "fd86:e070:5705:620a::36"
     volumes:
-      - ./examdata:/opt/website/data/
+      - ./examdata:/opt/website/data
 
 networks:
   internal:
