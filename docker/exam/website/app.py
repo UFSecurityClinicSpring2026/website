@@ -59,10 +59,11 @@ def exam_main():
                 exam_db.execute("UPDATE exam SET starttime=? WHERE token=?", 
                         (round(datetime.datetime.now().astimezone(datetime.timezone.utc).timestamp()), exam_token,))
                 exam_db.commit()
-    for row in exam_db.execute("SELECT token, starttime, endtime FROM exam WHERE token=? LIMIT 1", (exam_token,)):
+    for row in exam_db.execute("SELECT token, starttime, endtime, fname, lname " + 
+            "FROM exam WHERE token=? LIMIT 1", (exam_token,)):
         if row[1] is None:
             # Exam not started
-            return flask.render_template("examready.html")
+            return flask.render_template("examready.html", name=f"{row[3]} {row[4]}")
         elif row[2] is None:
             # Exam started, but not finished
             questions: list[tuple[int, str, list[tuple[int, str]]]] = []

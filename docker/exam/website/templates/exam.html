@@ -8,13 +8,13 @@
 </head>
 <body>
 	<h1>Exam</h1>
-	<p>For each question, choose the correct answer. Press submit when complete.</p>
-	<p>Do not navigate away from this page. If you do, your answers will not be saved.</p>
+	<p class="exam_preamble">For each question, choose the correct answer. Press submit when complete. <br> 
+	Do not navigate away from this page. If you do, your answers will not be saved.</p>
 	<form action="exam-submit" method="post">
 	{% for questionno, question, answers in questions %}
 		<p>Q: {{ question }}</p>
 		{% for answerno, answer in answers %}
-			<p><input type="radio" id="q{{ questionno }}a{{ answerno }}" name="q{{ questionno }}" value="a{{ answerno }}"><label for="q{{ questionno }}a{{ answerno }}">{{ answer }}</label></p>
+			<p><input type="radio" id="q{{ questionno }}a{{ answerno }}" name="q{{ questionno }}" value="a{{ answerno }}" required><label for="q{{ questionno }}a{{ answerno }}">{{ answer }}</label></p>
 		{% endfor %}
 	{% endfor %}
 	<p><input type="submit" value="Submit" />

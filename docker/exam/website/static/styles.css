@@ -1,0 +1,31 @@
+body {
+  background-color: #F3F3F3;
+  color: #133b84;
+  font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+  padding-left: 7%;
+  padding-right: 7%;
+}
+
+.exam_preamble {
+  font-size: 1.2em;
+  background-color: white;
+  border: 2px solid darkred;
+  padding: 10px ;
+}
+
+input[type="submit"], .return a {
+    background-color: white; 
+    color: #133b84;           
+    border: solid #133b84;           
+    padding: 10px 20px;        
+    cursor: pointer;                     
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;  
+    margin-bottom: 10px;      
+}
+
+input[type="submit"]:hover, .return a:hover {
+    background-color: #133b84;
+    color: #F3F3F3;             
+}

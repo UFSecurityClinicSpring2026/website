@@ -22,11 +22,14 @@ services:
     build: ./docker/exam
     environment:
       DEFAULT_PROCTOR_PASSWORD: "ChangeMe123!"
+      FILE_ENCRYPTION_SECRET: "ChangeMe123!"
       BASE_URL: "/exam"
     networks:
       internal:
         ipv4_address: 10.245.233.36
         ipv6_address: "fd86:e070:5705:620a::36"
+    volumes:
+      - ./examdata:/opt/website/data/
 
 networks:
   internal:
