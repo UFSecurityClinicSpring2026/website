@@ -12,6 +12,8 @@ from user import User
 
 import flask_login
 
+from forms import ContactForm
+
 app: flask.Flask = flask.Flask(__name__)
 app.secret_key = "super secret string" # CHANGE THIS FOR PRODUCTION
 login_manager = flask_login.LoginManager()
@@ -31,9 +33,22 @@ def check_requirements(username: str, password: str):
 def index():
     return flask.render_template("index.html")
 
-@app.route("/contact")
+@app.route("/contact", methods=["GET", "POST"])
 def contact_us():
-    return flask.render_template("contact.html")
+    form = ContactForm()
+    if form.validate_on_submit():
+        org_name = form.org_name.data
+        org_description = form.org_description.data
+        it_staff = form.it_staff.data
+        extra_org_info = form.extra_org_info.data
+        poc_name = form.poc_name.data
+        poc_title = form.poc_title.data
+        poc_email = form.poc_email.data
+        poc_phone = form.poc_phone.data
+        # TODO connect response to db or email
+        flask.flash("Thank you for contacting us! We will get back to you within 3-5 business days.")
+        return flask.redirect(flask.url_for("contact_us"))
+    return flask.render_template("contact.html", form=form)
 
 @app.route("/about")
 def about_us():
