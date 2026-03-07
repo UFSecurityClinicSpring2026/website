@@ -8,8 +8,44 @@
 </head>
 <body>
   {% include 'header.html' %}
-  <h1 class="page_title">Contact Us</h1>
-  <p>
-    This page is still a work in progress...
-  </p>
+    <h1>Contact Us</h1>
+    <form method="POST">
+      <p>
+        {{form.org_name.label}} <br>
+        {{form.org_name(size=30)}}
+      </p>
+      <p>
+        {{form.org_description.label}} <br>
+        {{form.org_description(size=30)}}
+      </p>
+      <p>
+        {{form.it_staff.label}} <br>
+        {{form.it_staff(size=30)}}
+      </p>
+      <p>
+        {{form.extra_org_info.label}} <br>
+        {{form.extra_org_info(size=30)}}
+      </p>
+      <p>
+        {{form.poc_name.label}} <br>
+        {{form.poc_name(size=30)}}
+      </p>
+      <p>
+        {{form.poc_title.label}} <br>
+        {{form.poc_title(size=30)}}
+      </p>
+      <p>
+        {{form.poc_email.label}} <br>
+        {{form.poc_email(size=30)}}
+      </p>
+      <p>
+        {{form.poc_phone.label}} <br>
+        {{form.poc_phone(size=30)}}
+      </p>
+      <p>
+        {{form.goals.label}} <br>
+        {{form.goals(size=30)}}
+      </p>
+      <p>{{form.submit()}}</p>
+    </form>
 </body>

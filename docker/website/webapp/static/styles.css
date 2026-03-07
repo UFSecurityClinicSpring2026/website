@@ -72,3 +72,20 @@ body {
   padding-left: 7%;
   padding-right: 7%;
 }
+
+input[type="submit"], .return a {
+    background-color: white; 
+    color: #133b84;           
+    border: solid #133b84;           
+    padding: 10px 20px;        
+    cursor: pointer;                     
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 5px;  
+    margin-bottom: 10px;      
+}
+
+input[type="submit"]:hover, .return a:hover {
+    background-color: #133b84;
+    color: #F3F3F3;             
+}
