@@ -43,7 +43,7 @@ def exam_login():
             break
         else:
             # User not found
-            return flask.redirect(flask.url_for("exam_login", error="Invalid name or password"))
+            return flask.redirect(flask.url_for("exam_login", error_msg="Invalid name or password"))
     else:
         flask.abort(405)
 

@@ -13,7 +13,7 @@ class ContactForm(FlaskForm):
     extra_org_info = TextAreaField('Is there anything else you want the clinic to know about your organization?')
     poc_name = StringField('Point Of Contact Name', validators=[DataRequired(), Length(min=2, max=50)])
     poc_title = StringField('Job Title', validators=[DataRequired(), Length(max=50)])
-    poc_email = StringField('Email Address', validators=[DataRequired(), Email()])
+    poc_email = StringField('Email Address', validators=[DataRequired()])
     poc_phone = StringField('Phone Number', validators=[DataRequired(), Length(min=10)])
     goals = TextAreaField('What are you looking to achieve through the clinic\'s services?', validators=[Length(max=650)])
     submit = SubmitField('Submit')

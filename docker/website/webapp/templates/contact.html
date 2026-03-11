@@ -10,42 +10,22 @@
   {% include 'header.html' %}
     <h1>Contact Us</h1>
     <form method="POST">
-      <p>
-        {{form.org_name.label}} <br>
-        {{form.org_name(size=30)}}
-      </p>
-      <p>
-        {{form.org_description.label}} <br>
-        {{form.org_description(size=30)}}
-      </p>
-      <p>
-        {{form.it_staff.label}} <br>
-        {{form.it_staff(size=30)}}
-      </p>
-      <p>
-        {{form.extra_org_info.label}} <br>
-        {{form.extra_org_info(size=30)}}
-      </p>
-      <p>
-        {{form.poc_name.label}} <br>
-        {{form.poc_name(size=30)}}
-      </p>
-      <p>
-        {{form.poc_title.label}} <br>
-        {{form.poc_title(size=30)}}
-      </p>
-      <p>
-        {{form.poc_email.label}} <br>
-        {{form.poc_email(size=30)}}
-      </p>
-      <p>
-        {{form.poc_phone.label}} <br>
-        {{form.poc_phone(size=30)}}
-      </p>
-      <p>
-        {{form.goals.label}} <br>
-        {{form.goals(size=30)}}
-      </p>
-      <p>{{form.submit()}}</p>
+		<p><label for="orgname">Organization Name: </label><input type="text" id="orgname" name="orgname"></p>
+		<p>
+			<label for="orgdescription">What does your organization do?</label><br />
+			<textarea id="orgdescription" name="orgdescription"></textarea>
+		</p>
+		<p>
+			<label for="orgextra">Is there anything else you want the clinic to know about your organization?</label><br />
+			<textarea id="orgextra" name="orgextra"></textarea>
+		</p>
+		<p><label for="pocname">Point Of Contact Name: </label><input type="text" id="pocname" name="pocname"></p>
+		<p><label for="pocemail">Email Address: </label><input type="email" id="pocemail" name="pocemail"></p>
+		<p><label for="pocphone">Phone Number: </label><input type="tel" id="pocphone" name="pocphone"></p>
+		<p>
+			<label for="goals">What are you looking to achieve through the clinic's services?</label><br />
+			<textarea id="goals" name="goals"></textarea>
+		</p>
+		<p><input type="submit" value="Submit"></p>
     </form>
 </body>

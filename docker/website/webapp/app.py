@@ -35,8 +35,10 @@ def index():
 
 @app.route("/contact", methods=["GET", "POST"])
 def contact_us():
-    form = ContactForm()
-    if form.validate_on_submit():
+    if flask.request.method == "GET":
+        return flask.render_template("contact.html")
+    elif flask.request.method == "POST":
+        '''
         org_name = form.org_name.data
         org_description = form.org_description.data
         it_staff = form.it_staff.data
@@ -45,14 +47,39 @@ def contact_us():
         poc_title = form.poc_title.data
         poc_email = form.poc_email.data
         poc_phone = form.poc_phone.data
-        # TODO connect response to db or email
-        flask.flash("Thank you for contacting us! We will get back to you within 3-5 business days.")
-        return flask.redirect(flask.url_for("contact_us"))
-    return flask.render_template("contact.html", form=form)
+        '''
+        
+        sql_db: sqlite3.Connection = sqldb.get_db()
+        sql_db.execute("INSERT INTO contact (orgname, orgdescription, " + 
+                "orgextra, pocname, pocemail, pocphone) " + 
+                "VALUES (?, ?, ?, ?, ?, ?);", (
+            flask.request.form.get("orgname", None),
+            flask.request.form.get("orgdescription", None),
+            flask.request.form.get("orgextra", None),
+            flask.request.form.get("pocname", None),
+            flask.request.form.get("pocemail", None),
+            flask.request.form.get("pocphone", None),
+        ))
+        sql_db.commit()
+        
+        return flask.render_template(
+            "delayed-redirect.html", 
+            title="Thanks for reaching out!", 
+            delay=5,
+            message="Thanks for reaching out! We'll get back to you as soon as possible.",
+            destination="/",
+        )
+    else:
+        flask.abort(405)
+    
 
 @app.route("/about")
 def about_us():
     return flask.render_template("about.html")
+
+@app.route("/expect")
+def what_to_expect():
+    return flask.render_template("whattoexpect.html")
 
 @app.route("/privacy")
 def privacy_policy():
