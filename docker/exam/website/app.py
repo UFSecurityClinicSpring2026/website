@@ -31,7 +31,7 @@ def browser_check():
 def exam_login():
     if flask.request.method == "GET":
         return flask.render_template("examlogin.html", 
-                error_message=flask.request.args.get('error', None))
+                error_msg=flask.request.args.get('error', None))
     elif flask.request.method == "POST":
         exam_db: sqlite3.Connection = sqldb.get_db()
         for row in exam_db.execute("SELECT token, starttime, endtime FROM exam WHERE fname=? AND lname=? AND password=?;",
@@ -43,7 +43,7 @@ def exam_login():
             break
         else:
             # User not found
-            return flask.redirect(flask.url_for("exam_login", error_msg="Invalid name or password"))
+            return flask.redirect(flask.url_for("exam_login", error="Invalid name or password"))
     else:
         flask.abort(405)
 
