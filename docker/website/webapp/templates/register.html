@@ -9,23 +9,18 @@
 <body>
   {% include 'header.html' %}
   <h1 class="page_title">Register</h1>
-  <p>
-    <form action="/register" method="post">
-      <p><label for="username">Username: </label><input type="text" id="username" name="username"></p>
-		  <p><label for="first name">First Name: </label><input type="text" id="first_name" name="first_name"></p>
-		  <p><label for="last name">Last Name: </label><input type="text" id="last_name" name="last_name"></p>
-		  <p><label for="password">Password: </label><input type="password" id="password" name="password"></p>
-      <p><label for="show_password">Show Password</label><input type="checkbox" id="show_password" onclick="togglePasswordVisibility()"></p>
-      <p>
-        <label for="type">I am a: </label>
-        <select name="selection" id="selection">
-          <option value="client">Client</option>
-          <option value="student">Student</option>
-        </select>
-      </p>
-		  <p><input type="submit" value="Submit"></p>
-    </form>
-  </p>
+  {% include 'flashes.html' %}
+  <form action="/register" method="post">
+    {{ form.hidden_tag() }}
+    <p>{{ form.username.label }} {{ form.username() }}</p>
+    <p>{{ form.first_name.label }} {{ form.first_name() }}</p>
+    <p>{{ form.last_name.label }} {{ form.last_name() }}</p>
+    <p>{{ form.email.label }} {{ form.email() }}</p>
+    <p>{{ form.password.label }} {{ form.password() }}</p>
+    <p><label for="show_password">Show Password</label><input type="checkbox" id="show_password" onclick="togglePasswordVisibility()"></p>
+    <p>{{ form.selection.label }} {{ form.selection() }}</p>
+		<p>{{ form.submit() }}</p>
+  </form>
 </body>
 <script>
   function togglePasswordVisibility() {

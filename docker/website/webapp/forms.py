@@ -3,7 +3,7 @@ Custom Form class for use with flask_wtf
 """
 
 from flask_wtf import FlaskForm
-from wtforms import StringField, TextAreaField, BooleanField, SubmitField
+from wtforms import StringField, TextAreaField, BooleanField, SubmitField, SelectField, PasswordField, EmailField
 from wtforms.validators import DataRequired, Email, Length
 
 class ContactForm(FlaskForm):
@@ -16,4 +16,13 @@ class ContactForm(FlaskForm):
     poc_email = StringField('Email Address', validators=[DataRequired()])
     poc_phone = StringField('Phone Number', validators=[DataRequired(), Length(min=10)])
     goals = TextAreaField('What are you looking to achieve through the clinic\'s services?', validators=[Length(max=650)])
+    submit = SubmitField('Submit')
+
+class RegisterForm(FlaskForm):
+    username = StringField('Username: ', validators=[DataRequired()])
+    first_name = StringField('First Name: ', validators=[DataRequired()])
+    last_name = StringField('Last Name: ', validators=[DataRequired()])
+    email = EmailField('Email: ', validators=[DataRequired(), Email(message="Must be a valid email address")])
+    password = PasswordField('Password: ', validators=[DataRequired(), Length(min=15, message="Password must be at least 15 characters long")])
+    selection =  SelectField('I am a: ', choices=['client', 'student'], validators=[DataRequired()])
     submit = SubmitField('Submit')

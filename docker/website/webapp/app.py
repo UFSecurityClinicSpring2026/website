@@ -12,7 +12,7 @@ from user import User
 
 import flask_login
 
-from forms import ContactForm
+import forms
 
 import uploads
 
@@ -114,43 +114,48 @@ def new_ticket():
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
+    form = forms.RegisterForm()
+    valid = form.validate_on_submit()
     if flask.request.method == "GET":
-        return flask.render_template("register.html")
+        return flask.render_template("register.html", form=form)
     elif flask.request.method == "POST":
         sql_db: sqlite3.Connection = sqldb.get_db()
-        if "username" not in flask.request.form or "first_name" not in flask.request.form or \
-                "last_name" not in flask.request.form or "password" not in flask.request.form or \
-                "selection" not in flask.request.form:
-            flask.abort(422)
-        username, password = flask.request.form["username"].strip(), flask.request.form["password"].strip()
+        if not valid:
+            for _, msg in form.errors.items():
+                flask.flash(msg[0], "error")
+            return flask.render_template("register.html", form=form)
+        username = form.username.data.strip()
+        password = form.password.data.strip()
+        email = form.email.data.strip()
+        first_name = form.first_name.data.strip()
+        last_name = form.last_name.data.strip()
         is_client = 0
         is_student = 0
-        if flask.request.form["selection"] == "client":
+        if form.selection.data == "client":
             is_client = 1
-        elif flask.request.form["selection"] == "student":
+        elif form.selection.data == "student":
             is_student = 1
         else:
-            print("bad selection")
-            flask.abort(422)
-        if not check_requirements(username, password):
-          # Should have a check in frontend as well, but okay for now
-            flask.abort(422)
+            is_student = 1
+        if re.match("\\w+", username) is None:
+            flask.flash("Username must only contain alphanumeric characters or underscores", "error")
+            return flask.redirect(flask.request.url)
         hashed = wk.generate_password_hash(password, salt_length=32)
         res = sql_db.execute("SELECT username FROM users WHERE username = ?;", (username,))
         res = res.fetchall()
         if len(res) > 0:
-            flask.abort(422)
-        sql_db.execute("INSERT INTO users (username, first_name, last_name, auth_string, is_student, is_client) VALUES (?, ?, ?, ?, ?, ?);", \
-                        (username, flask.request.form["first_name"], flask.request.form["last_name"], \
-                         hashed, is_student, is_client))
+            flask.flash("Username is unavailable", "error")
+            return flask.redirect(flask.request.url)
+        res = sql_db.execute("SELECT email FROM users WHERE email = ?;", (email,))
+        res = res.fetchall()
+        if len(res) > 0:
+            flask.flash("Email is already in use", "error")
+            return flask.redirect(flask.request.url)
+        sql_db.execute("INSERT INTO users (username, first_name, last_name, email, auth_string, is_student, is_client) VALUES (?, ?, ?, ?, ?, ?, ?);", \
+                        (username, first_name, last_name, email, hashed, is_student, is_client))
         sql_db.commit()
-        return flask.render_template(
-            "delayed-redirect.html",
-            title="Registered Successfully!",
-            delay=5,
-            message="You have successfully registered as a " + flask.request.form["selection"],
-            destination="/"
-        )
+        flask.flash("Registered Successfully!", "success")
+        return flask.redirect("/")
     else:
         flask.abort(405)
 
