@@ -12,8 +12,20 @@
   <p>
     <form action="/login" method="post">
       <p><label for="username">Username: </label><input type="text" id="username" name="username"></p>
-		  <p><label for="password">Password: </label><input type="text" id="password" name="password"></p>
+		  <p><label for="password">Password: </label><input type="password" id="password" name="password"></p>
+      <p><label for="show_password">Show Password</label><input type="checkbox" id="show_password" onclick="togglePasswordVisibility()"></p>
 		  <p><input type="submit" value="Submit"></p>
     </form>
   </p>
 </body>
+<script>
+  function togglePasswordVisibility() {
+    var passwordInput = document.getElementById("password");
+    if (passwordInput.type === "password") {
+      passwordInput.type = "text";
+    } else {
+      passwordInput.type = "password"
+    }
+  }
+</script>
+</html>

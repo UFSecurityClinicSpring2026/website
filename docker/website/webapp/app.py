@@ -14,8 +14,11 @@ import flask_login
 
 from forms import ContactForm
 
+import uploads
+
 app: flask.Flask = flask.Flask(__name__)
 app.secret_key = "super secret string" # CHANGE THIS FOR PRODUCTION
+app.config['MAX_CONTENT_LENGTH'] = uploads.max_filesize
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
 
@@ -162,9 +165,10 @@ def login():
         username, password = flask.request.form["username"].strip(), flask.request.form["password"].strip()
         if re.match("\\w+", username) is None:
             flask.abort(422)
-        res = sql_db.execute("SELECT username, auth_string, first_name, last_name, is_student, is_client FROM users WHERE username = ?;", (username,)).fetchall()
+        res = sql_db.execute("SELECT uid, auth_string, first_name, last_name, is_student, is_client FROM users WHERE username = ?;", (username,)).fetchall()
         if len(res) == 0:
             flask.abort(401)
+        uid = res[0][0]
         pass_hash = res[0][1]
         first_name = res[0][2]
         last_name = res[0][3]
@@ -172,7 +176,7 @@ def login():
         is_client = res[0][5]
         if not wk.check_password_hash(pass_hash, password):
             flask.abort(401)
-        user = User(username, first_name + " " + last_name, is_client, is_student)
+        user = User(uid, username, first_name + " " + last_name, is_client, is_student)
         flask_login.login_user(user)
         return flask.redirect('/')
     else:
@@ -188,3 +192,32 @@ def test():
 def logout():
   flask_login.logout_user()
   return flask.redirect('/')
+
+@app.route("/upload", methods=["GET", "POST"])
+@flask_login.login_required
+def upload():
+  if flask.request.method == "GET":
+    return flask.render_template("upload.html")
+  if flask.request.method == "POST":
+    if 'document' not in flask.request.files:
+      flask.flash("No file included", "error")
+      return flask.redirect(flask.request.url)
+    file = flask.request.files['document']
+    if file.filename == '':
+      flask.flash("No file selected", "error")
+      return flask.redirect(flask.request.url)
+    if file and uploads.validate(file):
+      file.stream.seek(0)
+      original, unique = uploads.save_file(file)
+      print(file.content_length)
+
+      uid = flask_login.current_user.get_id()
+      sql_db: sqlite3.Connection = sqldb.get_db()
+      sql_db.execute("INSERT INTO uploads (unique_name, uid, original_name) VALUES (?, ?, ?)", (unique, uid, original,))
+      sql_db.commit()
+
+      flask.flash("File successfully uploaded!", "success")
+      return flask.redirect('/upload')
+    else:
+      flask.flash("Invalid file type", "error")
+      return flask.redirect(flask.request.url)

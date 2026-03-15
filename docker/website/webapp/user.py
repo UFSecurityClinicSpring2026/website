@@ -5,21 +5,22 @@ import sqldb
 import werkzeug.security as wk
 
 class User:
-  def __init__(self, username, name, is_client, is_student):
+  def __init__(self, uid, username, name, is_client, is_student):
     self._username = username
     self._name = name
     self._is_client = is_client
     self._is_student = is_student
+    self._uid = uid
     self._authenticated = True
     self._active = True
     self._anonymous = False
   
-  def retrieve(username):
+  def retrieve(uid):
     sql_db: sqlite3.Connection = sqldb.get_db()
-    res = sql_db.execute("SELECT username, first_name, last_name, is_client, is_student FROM users WHERE username = ?;", (username,)).fetchall()
+    res = sql_db.execute("SELECT uid, username, first_name, last_name, is_client, is_student FROM users WHERE uid = ?;", (uid,)).fetchall()
     if len(res) == 0:
       return None
-    return User(res[0][0], res[0][1] + " " + res[0][2], res[0][3], res[0][4])
+    return User(res[0][0], res[0][1], res[0][2] + " " + res[0][3], res[0][4], res[0][5])
 
   @property
   def is_authenticated(self):
@@ -40,4 +41,10 @@ class User:
     self._authenticated = True
   
   def get_id(self):
+    return self._uid
+  
+  def get_username(self):
     return self._username
+  
+  def get_name(self):
+    return self._name

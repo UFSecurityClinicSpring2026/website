@@ -28,6 +28,7 @@ def get_db() -> sqlite3.Connection:
                 "\"orgname\" TEXT, \"orgdescription\" TEXT, \"orgextra\" TEXT, " + 
                 "\"pocname\" TEXT, \"pocemail\" TEXT, \"pocphone\" TEXT, " + 
                 "PRIMARY KEY(\"fid\" AUTOINCREMENT));")
+        flask.g.db.execute("CREATE TABLE IF NOT EXISTS uploads (unique_name TEXT NOT NULL, uid INTEGER NOT NULL REFERENCES users(uid), original_name TEXT NOT NULL, uploaded_at TEXT DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (unique_name));")
         flask.g.db.commit()
     
     return flask.g.db
@@ -36,7 +37,7 @@ def close_db():
     """
     Close the SQLite database associated with this app
     """
-    db = g.pop('db', None)
+    db = flask.g.pop('db', None)
 
     if db is not None:
         db.close()

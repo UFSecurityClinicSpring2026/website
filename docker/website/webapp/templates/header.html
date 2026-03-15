@@ -4,7 +4,13 @@
       <a href="/" class="logo"><img src="/static/images/logo.svg" alt="Logo for Florida Security Clinic"></a>
       <nav class="nav_bar">
         <li class="bordered"><a href="/contact">Contact Us</a></li>
-        <li class="bordered_right"><a href="/client">Client Portal</a></li>
+        {% if current_user.is_authenticated %}
+        <li class="bordered_right"><a href="/profile">{{ current_user.get_name() }}</a></li>
+        <li class="bordered_right"><a href="/logout">Logout</a></li>
+        {% else %}
+        <li class="bordered_right"><a href="/login">Login</a></li>
+        <li class="bordered_right"><a href="/register">Sign Up</a></li>
+        {% endif %}
       </nav>
     </div>
     <nav class="nav_bar">

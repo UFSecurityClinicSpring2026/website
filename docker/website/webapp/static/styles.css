@@ -27,12 +27,13 @@
 
 .above .nav_bar {
   padding: 0;
-  width: 25%;
+  width: 45%;
   height: 75%;
 }
 
 .above .nav_bar li {
   flex: 5;
+  flex-grow: 1;
 }
 
 .nav_bar {
@@ -88,4 +89,25 @@ input[type="submit"], .return a {
 input[type="submit"]:hover, .return a:hover {
     background-color: #133b84;
     color: #F3F3F3;             
+}
+
+.error {
+    padding: 8px;
+    color: red;
+    margin-bottom: 10px;
+}
+
+.success {
+    padding: 8px;
+    color: green;
+    margin-bottom: 10px;
+}
+
+.flashes {
+    list-style-type: none;
+    display: flex;
+    justify-content: flex-start;
+    text-align: center;
+    padding: 0;
+    margin: 0;
 }
