@@ -2,6 +2,7 @@
 Custom User class for use with flask_login
 """
 import sqldb
+import sqlite3
 import werkzeug.security as wk
 
 class User:
