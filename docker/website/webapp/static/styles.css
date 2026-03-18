@@ -103,6 +103,12 @@ input[type="submit"]:hover, .return a:hover {
     margin-bottom: 10px;
 }
 
+.info {
+    padding: 8px;
+    color: #133b84;
+    margin-bottom: 10px;
+}
+
 .flashes {
     list-style-type: none;
     display: flex;

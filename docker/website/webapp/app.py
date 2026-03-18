@@ -16,11 +16,32 @@ import forms
 
 import uploads
 
+import flask_mail
+
+import dotenv
+
+import os
+
+import jwt
+
+from time import time
+
+dotenv.load_dotenv()
 app: flask.Flask = flask.Flask(__name__)
-app.secret_key = "super secret string" # CHANGE THIS FOR PRODUCTION
+app.secret_key = os.getenv('FLASK_SECRET_KEY') # CHANGE THIS FOR PRODUCTION
 app.config['MAX_CONTENT_LENGTH'] = uploads.max_filesize
 login_manager = flask_login.LoginManager()
 login_manager.init_app(app)
+
+app.config['MAIL_SERVER'] = os.getenv('MAIL_SERVER')
+app.config['MAIL_PORT'] = int(os.getenv('MAIL_PORT')) 
+app.config['MAIL_USE_TLS'] = os.getenv('MAIL_USE_TLS') == 'True'
+app.config['MAIL_USE_SSL'] = os.getenv('MAIL_USE_SSL') == 'True'
+app.config['MAIL_USERNAME'] = os.getenv('MAIL_USERNAME')
+app.config['MAIL_PASSWORD'] = os.getenv('MAIL_PASSWORD')
+app.config['MAIL_DEFAULT_SENDER'] = os.getenv('MAIL_DEFAULT_SENDER')
+
+mail = flask_mail.Mail(app)
 
 """
 Overloading function for LoginManager
@@ -31,6 +52,20 @@ def user_loader(username):
 
 def check_requirements(username: str, password: str):
   return re.match(".{15,64}", password) is not None and re.match("\\w+", username) is not None
+
+def send_verification_email(name, email, username):
+  token = jwt.encode({'verify_email': username, 'exp': time() + 60*60}, app.secret_key, algorithm='HS256')
+  msg = flask_mail.Message(subject='[Florida Security Clinic] Verification Email',
+                           recipients=[email],
+                           body=flask.render_template('verify.txt', token=token, user=name))
+  
+  try:
+    mail.send(msg)
+    return True
+  except Exception as e:
+    print(f"Error sending verification email: {str(e)}")
+    return False
+
 
 @app.route("/")
 def index():
@@ -151,10 +186,16 @@ def register():
         if len(res) > 0:
             flask.flash("Email is already in use", "error")
             return flask.redirect(flask.request.url)
+        if not (send_verification_email(first_name + " " + last_name, email, username)):
+            flask.flash("Error sending verification email. Contact clinic volunteers", "error")
+            return flask.redirect(flask.request.url)
+           
         sql_db.execute("INSERT INTO users (username, first_name, last_name, email, auth_string, is_student, is_client) VALUES (?, ?, ?, ?, ?, ?, ?);", \
                         (username, first_name, last_name, email, hashed, is_student, is_client))
         sql_db.commit()
+
         flask.flash("Registered Successfully!", "success")
+        flask.flash("Please verify your email address using the link sent to your email", "info")
         return flask.redirect("/")
     else:
         flask.abort(405)
@@ -170,7 +211,7 @@ def login():
         username, password = flask.request.form["username"].strip(), flask.request.form["password"].strip()
         if re.match("\\w+", username) is None:
             flask.abort(422)
-        res = sql_db.execute("SELECT uid, auth_string, first_name, last_name, is_student, is_client FROM users WHERE username = ?;", (username,)).fetchall()
+        res = sql_db.execute("SELECT uid, auth_string, first_name, last_name, is_student, is_client, email, email_verify FROM users WHERE username = ?;", (username,)).fetchall()
         if len(res) == 0:
             flask.abort(401)
         uid = res[0][0]
@@ -179,6 +220,11 @@ def login():
         last_name = res[0][3]
         is_student = res[0][4]
         is_client = res[0][5]
+        email = res[0][6]
+        if res[0][7] == 0:
+            send_verification_email(first_name + " " + last_name, email, username)
+            flask.flash("You must verify your email before logging in. Another verification email has been sent", "error")
+            return flask.redirect("/login")
         if not wk.check_password_hash(pass_hash, password):
             flask.abort(401)
         user = User(uid, username, first_name + " " + last_name, is_client, is_student)
@@ -186,11 +232,6 @@ def login():
         return flask.redirect('/')
     else:
         flask.abort(405)
-
-@app.route("/test-login", methods=["GET"])
-@flask_login.login_required
-def test():
-  return "Logged in as " + flask_login.current_user.get_id()
 
 @app.route("/logout", methods=["GET", "POST"])
 @flask_login.login_required
@@ -226,3 +267,25 @@ def upload():
     else:
       flask.flash("Invalid file type", "error")
       return flask.redirect(flask.request.url)
+
+@app.route('/verify/<token>', methods=["GET"])
+def verify_email(token):
+  try:
+    username = jwt.decode(token, app.secret_key, algorithms="HS256")['verify_email']
+    sql_db: sqlite3.Connection = sqldb.get_db()
+    res = sql_db.execute("SELECT email_verify FROM users WHERE username = ?", (username,)).fetchall()
+    if len(res) != 1:
+      flask.flash("Invalid user. Try registering again", "error")
+      return flask.redirect("/")
+    if int(res[0][0]) == 1:
+      flask.flash("Email already verified", "info")
+      return flask.redirect("/login")
+
+    sql_db.execute("UPDATE users SET email_verify = 1 WHERE username = ?", (username,))
+    sql_db.commit()
+    flask.flash("Successfully verified email address", "success")
+    return flask.redirect("/login")
+  except Exception as e:
+    flask.flash("Invalid verification link", "error")
+    print(f"Error: {str(e)}")
+    return flask.redirect("/")

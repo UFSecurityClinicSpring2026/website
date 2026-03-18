@@ -2,3 +2,4 @@
 __pycache__
 website.log
 *.db
+.env
