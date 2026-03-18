@@ -9,6 +9,7 @@
 <body>
   {% include 'header.html' %}
   <h1 class="page_title">Login</h1>
+  {% include 'flashes.html' %}
   <p>
     <form action="/login" method="post">
       <p><label for="username">Username: </label><input type="text" id="username" name="username"></p>
