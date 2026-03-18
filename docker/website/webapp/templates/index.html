@@ -14,5 +14,8 @@
 	<p><a href="/tickets/new">Create a new ticket</a></p>
 	<p><a href="/privacy">Privacy Policy</a></p>
 	<p><a href="/exam">Are you a prospective student? Take the exam here!</a></p>
+  {% if current_user.is_authenticated %}
+  <p><a href="/upload">Upload your documents here</a></p>
+  {% endif %}
 </body>
 </html>
