@@ -49,3 +49,9 @@ class User:
   
   def get_name(self):
     return self._name
+
+  def is_client(self):
+    return self._is_client
+
+  def is_student(self):
+    return self._is_student

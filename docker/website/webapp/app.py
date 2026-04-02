@@ -124,6 +124,7 @@ def privacy_policy():
     return flask.render_template("privacy-policy.html")
 
 @app.route("/tickets/new", methods=["GET", "POST"])
+@flask_login.login_required
 def new_ticket():
     if flask.request.method == "GET":
         return flask.render_template("new-ticket-form.html")
@@ -289,3 +290,11 @@ def verify_email(token):
     flask.flash("Invalid verification link", "error")
     print(f"Error: {str(e)}")
     return flask.redirect("/")
+
+@app.route('/tickets/dashboard', methods=["GET"])
+@flask_login.login_required
+def ticket_view():
+  if (flask_login.current_user.is_client()):
+    return flask.render_template('ticket-dashboard-client.html')
+  elif (flask_login.current_user.is_student()):
+    return flask.render_template('ticket-dashboard-student.html')
