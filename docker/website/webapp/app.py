@@ -130,21 +130,15 @@ def new_ticket():
         return flask.render_template("new-ticket-form.html")
     elif flask.request.method == "POST":
         sql_db: sqlite3.Connection = sqldb.get_db()
-        if "name" not in flask.request.form or "email" not in flask.request.form or \
-                "message" not in flask.request.form:
+        cursor = sql_db.cursor()
+        if "title" not in flask.request.form or "message" not in flask.request.form:
             flask.abort(422)
-        sql_db.execute("INSERT INTO tickets (name, email, message) VALUES (?, ?, ?);",
-                (flask.request.form["name"], flask.request.form["email"],
-                flask.request.form["message"],))
+        cursor.execute("INSERT INTO tickets (title, message, status, claimed) VALUES (?, ?, 1, 0);",
+                (flask.request.form["title"], flask.request.form["message"],))
+        cursor.execute("INSERT INTO users_tickets (uid, fid) VALUES (?, ?);", (flask_login.current_user.get_id(), cursor.lastrowid))
         sql_db.commit()
-        return flask.render_template(
-            "delayed-redirect.html", 
-            title="Ticket submitted!", 
-            delay=5,
-            message="We've received your response and will reply to it " + 
-                    "within 3-5 business days.",
-            destination="/",
-        )
+        flask.flash('Ticket Successfully Submitted', 'success')
+        return flask.redirect("/tickets/dashboard")
     else:
         flask.abort(405)
 
@@ -197,6 +191,7 @@ def register():
 
         flask.flash("Registered Successfully!", "success")
         flask.flash("Please verify your email address using the link sent to your email", "info")
+        flask_login.logout_user()
         return flask.redirect("/")
     else:
         flask.abort(405)
@@ -294,7 +289,16 @@ def verify_email(token):
 @app.route('/tickets/dashboard', methods=["GET"])
 @flask_login.login_required
 def ticket_view():
-  if (flask_login.current_user.is_client()):
+  curr_user = flask_login.current_user
+  if (curr_user.is_client()):
+    sql_db: sqlite3.Connection = sqldb.get_db()
+    res = sql_db.execute("SELECT title, message, status FROM tickets JOIN users_tickets ON tickets.fid = users_tickets.fid JOIN users ON users_tickets.uid = users.uid WHERE users.uid = ?;", (curr_user.get_id(),))
+    print(res.fetchall())
     return flask.render_template('ticket-dashboard-client.html')
-  elif (flask_login.current_user.is_student()):
+  elif (curr_user.is_student()):
+    sql_db: sqlite3.Connection = sqldb.get_db()
+    res = sql_db.execute("SELECT title, message, status FROM tickets JOIN claimed_tickets ON tickets.fid = claimed_tickets.fid JOIN users ON claimed_tickets.uid = users.uid WHERE users.uid = ?;", (curr_user.get_id(),))
+    print("Claimed tickets: ", res.fetchall())
+    res = sql_db.execute("SELECT title, message, users.first_name, users.last_name, status FROM tickets LEFT JOIN claimed_tickets ON tickets.fid = claimed_tickets.fid JOIN users_tickets ON tickets.fid = users_tickets.fid JOIN users ON users_tickets.uid = users.uid WHERE claimed_tickets.fid IS NULL;")
+    print("Unclaimed tickets: ", res.fetchall())
     return flask.render_template('ticket-dashboard-student.html')
