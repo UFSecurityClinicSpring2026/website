@@ -293,8 +293,8 @@ def ticket_view():
   if (curr_user.is_client()):
     sql_db: sqlite3.Connection = sqldb.get_db()
     res = sql_db.execute("SELECT title, message, status FROM tickets JOIN users_tickets ON tickets.fid = users_tickets.fid JOIN users ON users_tickets.uid = users.uid WHERE users.uid = ?;", (curr_user.get_id(),))
-    print(res.fetchall())
-    return flask.render_template('ticket-dashboard-client.html')
+    tickets = res.fetchall()
+    return flask.render_template('ticket-dashboard-client.html', tickets=tickets)
   elif (curr_user.is_student()):
     sql_db: sqlite3.Connection = sqldb.get_db()
     res = sql_db.execute("SELECT title, message, status FROM tickets JOIN claimed_tickets ON tickets.fid = claimed_tickets.fid JOIN users ON claimed_tickets.uid = users.uid WHERE users.uid = ?;", (curr_user.get_id(),))
