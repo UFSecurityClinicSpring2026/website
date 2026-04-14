@@ -6,6 +6,7 @@ RUN apt-get install python3-flask python3-waitress python3-flask-login python3-f
 
 COPY ./webapp /opt/webapp/
 COPY ./startwebsite.sh.gz /tmp/
+RUN mkdir /opt/uploads
 
 VOLUME ["/opt/caddy"]
 

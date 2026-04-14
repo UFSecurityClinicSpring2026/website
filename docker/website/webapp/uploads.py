@@ -3,7 +3,7 @@ import uuid
 import magic
 import os
 
-upload_folder = "uploads"
+upload_folder = "/opt/uploads"
 allowed_extensions = {'txt', 'pdf', 'odt', 'ods', 'odp', 'docx', 'rtf', 'doc', 'eml', 'pptx', 'ppt', 'xlsx', 'xls'}
 allowed_mime_types = {"application/pdf", "application/rtf", "application/vnd.oasis.opendocument.text", 
                       "application/msword", "application/vnd.openxmlformats-officedocument.wordprocessingml.document",

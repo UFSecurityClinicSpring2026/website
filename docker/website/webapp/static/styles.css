@@ -117,3 +117,26 @@ input[type="submit"]:hover, .return a:hover {
     padding: 0;
     margin: 0;
 }
+
+.tickets {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.tickets th, .tickets td {
+    border: 1px solid #133b84;
+    padding: 8px;
+    text-align: center;
+    max-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.tickets tr:nth-child(even) {
+    background-color: white;
+}
+
+.ticket_message {
+  text-decoration: none;
+  border-bottom: none;
+}

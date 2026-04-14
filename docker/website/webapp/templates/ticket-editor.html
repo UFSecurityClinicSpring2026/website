@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/static/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tickets - Florida Security Clinic</title>
+</head>
+<body>
+	{% include 'header.html' %}
+	<h1 class="page_title">Ticket Editor</h1>
+  {% include 'flashes.html' %}
+  <h2 class="page_title">{{ title }}</h2>
+  <p>Message: {{ message }}</p>
+	<form action="/dashboard/tickets/edit" method="post">
+		<p>
+			<label for="note">Notes: </label><br />
+			<textarea id="note" name="note">{% if notes %}{{ notes }}{% endif %}</textarea>
+		</p>
+    <input type="hidden" name="fid" value="{{ ticket_id }}">
+		<p><input type="submit" name="action" value="Save"><input type="submit" name="action" value="Close"></p>
+	</form>
+  <form action="/dashboard/tickets" method="get">
+    <p><input type="submit" value="Back"></p>
+  </form>
+</body>
+</html>

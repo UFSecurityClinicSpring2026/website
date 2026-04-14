@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/static/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tickets - Florida Security Clinic</title>
+</head>
+<body>
+	{% include 'header.html' %}
+	<h1 class="page_title">Ticket Dashboard</h1>
+  {% include 'flashes.html' %}
+  {% if unclaimed_tickets %}
+  <h2 class="page_title">Unclaimed Tickets</h2>
+  <table class="tickets">
+    <thead>
+      <tr><th>Title</th><th>Message</th><th>Submitted By</th><th>Notes</th><th>Updated At</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for ticket in unclaimed_tickets %}
+        <tr>
+          <td>{{ ticket[0] }}</td>
+          <td><abbr class="ticket_message" title="{{ ticket[1] }}"">{{ ticket[1] }}</abbr></td>
+          <td>{{ ticket[2] }}</td>
+          <td>{{ ticket[4] }}</td>
+          <td>{{ ticket[5] }} UTC</td>
+          <td>
+            <form action="/dashboard/tickets/claim" method="POST">
+              <input type="hidden" name="fid" value="{{ ticket[6] }}">
+              <input type="hidden" name="uid" value="{{ current_user.get_id() }}">
+              <button type="submit">Claim</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% if claimed_tickets %}
+  <h2 class="page_title">Your Tickets</h2>
+  <table class="tickets">
+    <thead>
+      <tr><th>Title</th><th>Message</th><th>Submitted By</th><th>Notes</th><th>Updated At</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for t2 in claimed_tickets %}
+        <tr>
+          <td>{{ t2[0] }}</td>
+          <td><abbr class="ticket_message" title="{{ t2[1] }}">{{ t2[1] }}</abbr></td>
+          <td>{{ t2[3] }}</td>
+          <td>{{ t2[5] }}</td>
+          <td>{{ t2[6] }} UTC</td>
+          <td>
+            <form action="/dashboard/tickets/edit" method="GET">
+              <input type="hidden" name="fid" value="{{ t2[7] }}">
+              <button type="submit">Edit</button>
+            </form>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  {% if closed_tickets %}
+  <h2 class="page_title">Closed Tickets</h2>
+  <table class="tickets">
+    <thead>
+      <tr><th>Title</th><th>Message</th><th>Submitted By</th><th>Notes</th><th>Closed At</th><th>Closed By</th></tr>
+    </thead>
+    <tbody>
+      {% for t3 in closed_tickets %}
+        <tr>
+          <td>{{ t3[0] }}</td>
+          <td><abbr class="ticket_message" title="{{ t3[1] }}">{{ t3[1] }}</abbr></td>
+          <td>{{ t3[3] }}</td>
+          <td>{{ t3[5] }}</td>
+          <td>{{ t3[6] }} UTC</td>
+          <td>{{ t3[2] }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+</body>

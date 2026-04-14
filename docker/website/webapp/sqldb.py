@@ -22,7 +22,13 @@ def get_db() -> sqlite3.Connection:
     
     if "db" not in flask.g:
         flask.g.db = sqlite3.connect(database_path)
-        flask.g.db.execute("CREATE TABLE IF NOT EXISTS tickets (fid INTEGER NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL, message TEXT, PRIMARY KEY (fid AUTOINCREMENT));")
+        flask.g.db.execute("CREATE TABLE IF NOT EXISTS tickets (fid INTEGER NOT NULL, title TEXT NOT NULL, message TEXT NOT NULL, status INTEGER NOT NULL, notes TEXT, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (fid AUTOINCREMENT));")
+        flask.g.db.execute("CREATE TABLE IF NOT EXISTS users_tickets (uid INTEGER NOT NULL, fid INTEGER NOT NULL, \
+                            PRIMARY KEY (uid, fid), FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE, \
+                            FOREIGN KEY (fid) REFERENCES tickets(fid) ON DELETE CASCADE);")
+        flask.g.db.execute("CREATE TABLE IF NOT EXISTS claimed_tickets (uid INTEGER NOT NULL, fid INTEGER NOT NULL, \
+                            PRIMARY KEY (uid, fid), FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE, \
+                            FOREIGN KEY (fid) REFERENCES tickets(fid) ON DELETE CASCADE);")
         flask.g.db.execute("CREATE TABLE IF NOT EXISTS users (uid INTEGER NOT NULL, username TEXT NOT NULL, first_name TEXT NOT NULL, last_name TEXT NOT NULL, email TEXT NOT NULL, email_verify INTEGER DEFAULT 0, auth_string TEXT NOT NULL, is_student INTEGER, is_client INTEGER, PRIMARY KEY (uid AUTOINCREMENT));")
         flask.g.db.execute("CREATE TABLE IF NOT EXISTS \"contact\" ( \"fid\" INTEGER NOT NULL, " + 
                 "\"orgname\" TEXT, \"orgdescription\" TEXT, \"orgextra\" TEXT, " + 

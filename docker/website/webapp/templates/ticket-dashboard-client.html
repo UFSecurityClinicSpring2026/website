@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/static/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Tickets - Florida Security Clinic</title>
+</head>
+<body>
+	{% include 'header.html' %}
+	<h1 class="page_title">Ticket Dashboard</h1>
+  {% include 'flashes.html' %}
+  <h2 class="page_title">Your Tickets</h2>
+  {% if tickets %}
+  <table class="tickets">
+    <thead>
+      <tr><th>Title</th><th>Message</th><th>Status</th><th>Notes</th><th>Updated At</th></tr>
+    </thead>
+    <tbody>
+      {% for ticket in tickets %}
+        <tr>
+          <td>{{ ticket[0] }}</td>
+          <td><abbr title="{{ ticket[1] }}"">{{ ticket[1] }}</abbr></td>
+          <td>{% if ticket[2] == 1 %}Open{% elif ticket[2] == 2 %}Claimed{% else %}Closed{% endif %}</td>
+          <td>{{ ticket[3] }}</td>
+          <td>{{ ticket[4] }} UTC</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+  <br>
+  <a href="/dashboard/tickets/new">Submit a ticket here</a>
+</body>
