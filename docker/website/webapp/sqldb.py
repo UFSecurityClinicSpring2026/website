@@ -22,7 +22,7 @@ def get_db() -> sqlite3.Connection:
     
     if "db" not in flask.g:
         flask.g.db = sqlite3.connect(database_path)
-        flask.g.db.execute("CREATE TABLE IF NOT EXISTS tickets (fid INTEGER NOT NULL, title TEXT NOT NULL, message TEXT NOT NULL, status INTEGER NOT NULL, claimed INTEGER NOT NULL, PRIMARY KEY (fid AUTOINCREMENT));")
+        flask.g.db.execute("CREATE TABLE IF NOT EXISTS tickets (fid INTEGER NOT NULL, title TEXT NOT NULL, message TEXT NOT NULL, status INTEGER NOT NULL, notes TEXT, updated_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP, PRIMARY KEY (fid AUTOINCREMENT));")
         flask.g.db.execute("CREATE TABLE IF NOT EXISTS users_tickets (uid INTEGER NOT NULL, fid INTEGER NOT NULL, \
                             PRIMARY KEY (uid, fid), FOREIGN KEY (uid) REFERENCES users(uid) ON DELETE CASCADE, \
                             FOREIGN KEY (fid) REFERENCES tickets(fid) ON DELETE CASCADE);")

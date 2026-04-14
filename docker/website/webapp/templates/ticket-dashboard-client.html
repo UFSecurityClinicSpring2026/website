@@ -14,7 +14,7 @@
   {% if tickets %}
   <table class="tickets">
     <thead>
-      <tr><th>Title</th><th>Message</th><th>Status</th><th>Notes</th></tr>
+      <tr><th>Title</th><th>Message</th><th>Status</th><th>Notes</th><th>Updated At</th></tr>
     </thead>
     <tbody>
       {% for ticket in tickets %}
@@ -22,12 +22,13 @@
           <td>{{ ticket[0] }}</td>
           <td><abbr title="{{ ticket[1] }}"">{{ ticket[1] }}</abbr></td>
           <td>{% if ticket[2] == 1 %}Open{% elif ticket[2] == 2 %}Claimed{% else %}Closed{% endif %}</td>
-          <td>N/A</td>
+          <td>{{ ticket[3] }}</td>
+          <td>{{ ticket[4] }} UTC</td>
         </tr>
       {% endfor %}
     </tbody>
   </table>
   {% endif %}
   <br>
-  <a href="/tickets/new">Submit a ticket here</a>
+  <a href="/dashboard/tickets/new">Submit a ticket here</a>
 </body>

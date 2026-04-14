@@ -123,7 +123,7 @@ def what_to_expect():
 def privacy_policy():
     return flask.render_template("privacy-policy.html")
 
-@app.route("/tickets/new", methods=["GET", "POST"])
+@app.route("/dashboard/tickets/new", methods=["GET", "POST"])
 @flask_login.login_required
 def new_ticket():
     if flask.request.method == "GET":
@@ -133,12 +133,12 @@ def new_ticket():
         cursor = sql_db.cursor()
         if "title" not in flask.request.form or "message" not in flask.request.form:
             flask.abort(422)
-        cursor.execute("INSERT INTO tickets (title, message, status, claimed) VALUES (?, ?, 1, 0);",
+        cursor.execute("INSERT INTO tickets (title, message, status) VALUES (?, ?, 1);",
                 (flask.request.form["title"], flask.request.form["message"],))
         cursor.execute("INSERT INTO users_tickets (uid, fid) VALUES (?, ?);", (flask_login.current_user.get_id(), cursor.lastrowid))
         sql_db.commit()
         flask.flash('Ticket Successfully Submitted', 'success')
-        return flask.redirect("/tickets/dashboard")
+        return flask.redirect("/dashboard/tickets")
     else:
         flask.abort(405)
 
@@ -286,19 +286,95 @@ def verify_email(token):
     print(f"Error: {str(e)}")
     return flask.redirect("/")
 
-@app.route('/tickets/dashboard', methods=["GET"])
+@app.route('/dashboard/tickets', methods=["GET"])
 @flask_login.login_required
 def ticket_view():
   curr_user = flask_login.current_user
   if (curr_user.is_client()):
     sql_db: sqlite3.Connection = sqldb.get_db()
-    res = sql_db.execute("SELECT title, message, status FROM tickets JOIN users_tickets ON tickets.fid = users_tickets.fid JOIN users ON users_tickets.uid = users.uid WHERE users.uid = ?;", (curr_user.get_id(),))
+    res = sql_db.execute("SELECT title, message, status, notes, updated_at, tickets.fid FROM tickets JOIN users_tickets ON tickets.fid = users_tickets.fid JOIN users ON users_tickets.uid = users.uid WHERE users.uid = ? ORDER BY tickets.updated_at DESC;", (curr_user.get_id(),))
     tickets = res.fetchall()
     return flask.render_template('ticket-dashboard-client.html', tickets=tickets)
   elif (curr_user.is_student()):
     sql_db: sqlite3.Connection = sqldb.get_db()
-    res = sql_db.execute("SELECT title, message, status FROM tickets JOIN claimed_tickets ON tickets.fid = claimed_tickets.fid JOIN users ON claimed_tickets.uid = users.uid WHERE users.uid = ?;", (curr_user.get_id(),))
-    print("Claimed tickets: ", res.fetchall())
-    res = sql_db.execute("SELECT title, message, users.first_name, users.last_name, status FROM tickets LEFT JOIN claimed_tickets ON tickets.fid = claimed_tickets.fid JOIN users_tickets ON tickets.fid = users_tickets.fid JOIN users ON users_tickets.uid = users.uid WHERE claimed_tickets.fid IS NULL;")
-    print("Unclaimed tickets: ", res.fetchall())
-    return flask.render_template('ticket-dashboard-student.html')
+    claimed = sql_db.execute("SELECT tickets.title, tickets.message, students.first_name || ' ' || students.last_name AS student_name, clients.first_name || ' ' || clients.last_name AS client_name, tickets.status, tickets.notes, tickets.updated_at, tickets.fid FROM tickets JOIN claimed_tickets ON tickets.fid = claimed_tickets.fid JOIN users students ON claimed_tickets.uid = students.uid JOIN users_tickets ON users_tickets.fid = claimed_tickets.fid JOIN users clients ON clients.uid = users_tickets.uid WHERE students.uid = ? AND tickets.status = 2 ORDER BY tickets.updated_at DESC;", (curr_user.get_id(),)).fetchall()
+    closed = sql_db.execute("SELECT tickets.title, tickets.message, students.first_name || ' ' || students.last_name AS student_name, clients.first_name || ' ' || clients.last_name AS client_name, tickets.status, tickets.notes, tickets.updated_at, tickets.fid FROM tickets JOIN claimed_tickets ON tickets.fid = claimed_tickets.fid JOIN users students ON claimed_tickets.uid = students.uid JOIN users_tickets ON users_tickets.fid = claimed_tickets.fid JOIN users clients ON clients.uid = users_tickets.uid WHERE students.uid = ? AND tickets.status = 0 ORDER BY tickets.updated_at DESC;", (curr_user.get_id(),)).fetchall()
+    unclaimed = sql_db.execute("SELECT tickets.title, tickets.message, users.first_name || ' ' || users.last_name AS name, tickets.status, tickets.notes, tickets.updated_at, tickets.fid FROM tickets LEFT JOIN claimed_tickets ON tickets.fid = claimed_tickets.fid JOIN users_tickets ON tickets.fid = users_tickets.fid JOIN users ON users_tickets.uid = users.uid WHERE claimed_tickets.fid IS NULL ORDER BY tickets.updated_at DESC;").fetchall()
+    print(claimed)
+    return flask.render_template('ticket-dashboard-student.html', unclaimed_tickets=unclaimed, claimed_tickets=claimed, closed_tickets=closed)
+  
+@app.route('/dashboard/tickets/claim', methods=["POST"])
+@flask_login.login_required
+def claim_ticket():
+  curr_user = flask_login.current_user
+  if 'uid' not in flask.request.form or 'fid' not in flask.request.form:
+    return flask.abort(422)
+  sub_uid = int(flask.request.form['uid'])
+  sub_fid = int(flask.request.form['fid'])
+  if sub_uid != curr_user.get_id():
+    print(sub_uid, curr_user.get_id())
+    return flask.abort(403)
+  sql_db: sqlite3.Connection = sqldb.get_db()
+  curr_status = int(sql_db.execute("SELECT status FROM tickets WHERE fid = ?;", (sub_fid,)).fetchone()[0])
+  if curr_status == 2:
+    flask.flash("This ticket is already claimed", "error")
+    return flask.redirect('/dashboard/tickets')
+  if curr_status == 0:
+    flask.flash("Cannot claim a closed ticket")
+    return flask.redirect('/dashboard/tickets')
+  
+  sql_db.execute("INSERT INTO claimed_tickets (uid, fid) VALUES (?, ?);", (sub_uid, sub_fid,))
+  sql_db.execute("UPDATE tickets SET status = 2, updated_at = CURRENT_TIMESTAMP WHERE fid = ?;", (sub_fid,))
+  sql_db.commit()
+
+  flask.flash("Ticket successfully claimed", "success")
+  return flask.redirect('/dashboard/tickets')
+
+@app.route('/dashboard/tickets/edit', methods=["GET", "POST"])
+@flask_login.login_required
+def edit_ticket():
+  fid = 0
+
+  # Argument checking
+  if flask.request.method == "GET":
+    if 'fid' not in flask.request.args:
+      return flask.abort(422)
+    fid = flask.request.args['fid']
+  elif flask.request.method == "POST":
+    if 'fid' not in flask.request.form or 'note' not in flask.request.form or 'action' not in flask.request.form:
+      return flask.abort(422)
+    fid = flask.request.form['fid']
+  else:
+    return flask.abort(405)
+  
+  curr_user = flask_login.current_user
+  sql_db: sqlite3.Connection = sqldb.get_db()
+  ticket = sql_db.execute("SELECT title, message, status, notes, fid FROM tickets WHERE fid = ?;", (fid,)).fetchone()
+  # Overwrite any weirdness tried in the fid field
+  fid = int(ticket[4])
+  if ticket == None:
+    flask.flash("Ticket does not exist", "error")
+    return flask.redirect('/dashboard/tickets')
+  uid = curr_user.get_id()
+  is_owner = sql_db.execute("SELECT fid FROM claimed_tickets WHERE fid = ? AND uid = ?;", (fid, uid,))
+  if is_owner == None:
+    flask.flash("You do not have permission to edit this ticket", "error")
+    return flask.redirect('/dashboard/tickets')
+  if int(ticket[2]) == 0:
+    flask.flash("You can not modify a closed ticket", "error")
+    return flask.redirect('/dashboard/tickets')
+
+  if flask.request.method == "GET":
+    return flask.render_template("ticket-editor.html", title=ticket[0], message=ticket[1], notes=ticket[3], ticket_id=fid)
+  else:
+    action = flask.request.form['action']
+    note = flask.request.form['note']
+    status = 2
+    if action == 'Close':
+      status = 0
+    sql_db.execute("UPDATE tickets SET notes = ?, status = ?, updated_at = CURRENT_TIMESTAMP WHERE fid = ?;", (note, status, fid))
+    sql_db.commit()
+    flask.flash("Successfully edited ticket", "success")
+    return flask.redirect('/dashboard/tickets')
+
+    

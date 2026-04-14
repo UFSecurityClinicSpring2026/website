@@ -135,3 +135,8 @@ input[type="submit"]:hover, .return a:hover {
 .tickets tr:nth-child(even) {
     background-color: white;
 }
+
+.ticket_message {
+  text-decoration: none;
+  border-bottom: none;
+}
