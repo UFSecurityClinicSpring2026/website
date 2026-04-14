@@ -235,7 +235,7 @@ def logout():
   flask_login.logout_user()
   return flask.redirect('/')
 
-@app.route("/upload", methods=["GET", "POST"])
+@app.route("/dashboard/upload", methods=["GET", "POST"])
 @flask_login.login_required
 def upload():
   if flask.request.method == "GET":
@@ -259,7 +259,7 @@ def upload():
       sql_db.commit()
 
       flask.flash("File successfully uploaded!", "success")
-      return flask.redirect('/upload')
+      return flask.redirect('/dashboard')
     else:
       flask.flash("Invalid file type", "error")
       return flask.redirect(flask.request.url)
@@ -377,4 +377,9 @@ def edit_ticket():
     flask.flash("Successfully edited ticket", "success")
     return flask.redirect('/dashboard/tickets')
 
-    
+@app.route('/dashboard', methods=["GET"])
+@flask_login.login_required
+def get_dashboard():
+  if flask.request.method != "GET":
+    return flask.abort(405)
+  return flask.render_template("dashboard.html")

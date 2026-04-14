@@ -1,0 +1,19 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="/static/styles.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Dashboard - Florida Security Clinic</title>
+</head>
+<body>
+	{% include 'header.html' %}
+	<h1 class="page_title">Dashboard</h1>
+  {% include 'flashes.html' %}
+	<p>Welcome to your home page! It is currently a work in progress.</p>
+	<p><a href="/dashboard/tickets/new">Create a new ticket</a></p>
+  <p><a href="/dashboard/tickets">View your tickets</a></p>
+  <p><a href="/dashboard/upload">Upload documents</a></p>
+</body>
+</html>

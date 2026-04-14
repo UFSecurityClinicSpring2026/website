@@ -5,7 +5,7 @@
       <nav class="nav_bar">
         <li class="bordered"><a href="/contact">Contact Us</a></li>
         {% if current_user.is_authenticated %}
-        <li class="bordered_right"><a href="/profile">{{ current_user.get_name() }}</a></li>
+        <li class="bordered_right"><a href="/dashboard">{{ current_user.get_name() }}</a></li>
         <li class="bordered_right"><a href="/logout">Logout</a></li>
         {% else %}
         <li class="bordered_right"><a href="/login">Login</a></li>

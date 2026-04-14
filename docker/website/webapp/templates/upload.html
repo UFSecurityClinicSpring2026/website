@@ -10,7 +10,7 @@
 	{% include 'header.html' %}
   <h2 class="page_title">Upload Files</h2>
   {% include 'flashes.html' %}
-  <form action="/upload" method="post" enctype="multipart/form-data">
+  <form action="/dashboard/upload" method="post" enctype="multipart/form-data">
     <label for="file-upload">Select document to upload:</label>
     <input type="file" id="file-upload" name="document">
     <button type="submit">Upload File</button>
