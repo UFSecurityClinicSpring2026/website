@@ -198,6 +198,8 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
+    if flask_login.user_logged_in:
+      return flask.redirect('/dashboard')
     if flask.request.method == "GET":
         return flask.render_template("login.html")
     elif flask.request.method == "POST":
@@ -238,8 +240,11 @@ def logout():
 @app.route("/dashboard/upload", methods=["GET", "POST"])
 @flask_login.login_required
 def upload():
+  sql_db: sqlite3.Connection = sqldb.get_db()
   if flask.request.method == "GET":
-    return flask.render_template("upload.html")
+    curr_user = flask_login.current_user
+    files = sql_db.execute("SELECT original_name, uploaded_at FROM uploads WHERE uid = ?;", (curr_user.get_id(),)).fetchall()
+    return flask.render_template("upload.html", files=files)
   if flask.request.method == "POST":
     if 'document' not in flask.request.files:
       flask.flash("No file included", "error")
@@ -254,7 +259,6 @@ def upload():
       print(file.content_length)
 
       uid = flask_login.current_user.get_id()
-      sql_db: sqlite3.Connection = sqldb.get_db()
       sql_db.execute("INSERT INTO uploads (unique_name, uid, original_name) VALUES (?, ?, ?)", (unique, uid, original,))
       sql_db.commit()
 

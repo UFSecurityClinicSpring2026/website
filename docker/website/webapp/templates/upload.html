@@ -15,4 +15,21 @@
     <input type="file" id="file-upload" name="document">
     <button type="submit">Upload File</button>
   </form>
+  <p></p>
+  <h2 class="page_title">Uploads</h2>
+  {% if files %}
+  <table class="tickets">
+    <thead>
+      <tr><th>File</th><th>Uploaded At</th></tr>
+    </thead>
+    <tbody>
+      {% for file in files %}
+        <tr>
+          <td>{{ file[0] }}</td>
+          <td>{{ file[1] }} UTC</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
 </html>
