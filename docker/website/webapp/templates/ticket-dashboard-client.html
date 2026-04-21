@@ -20,7 +20,7 @@
       {% for ticket in tickets %}
         <tr>
           <td>{{ ticket[0] }}</td>
-          <td><abbr title="{{ ticket[1] }}"">{{ ticket[1] }}</abbr></td>
+          <td><abbr class="ticket_message" title="{{ ticket[1] }}"">{{ ticket[1] }}</abbr></td>
           <td>{% if ticket[2] == 1 %}Open{% elif ticket[2] == 2 %}Claimed{% else %}Closed{% endif %}</td>
           <td>{{ ticket[3] }}</td>
           <td>{{ ticket[4] }} UTC</td>
