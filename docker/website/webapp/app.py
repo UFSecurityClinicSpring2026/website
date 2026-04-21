@@ -198,7 +198,7 @@ def register():
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-    if flask_login.user_logged_in:
+    if flask_login.current_user.is_authenticated:
       return flask.redirect('/dashboard')
     if flask.request.method == "GET":
         return flask.render_template("login.html")
